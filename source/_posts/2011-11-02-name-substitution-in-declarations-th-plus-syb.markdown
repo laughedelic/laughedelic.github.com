@@ -17,7 +17,7 @@ _(репост из [tumblr](http://laughedelic.tumblr.com/post/12217333091/th-s
 Итак, напомню, в чём заключается задача. Я писал об этом в [первом посте о Template Haskell](http://laughedelic.tumblr.com/post/11969113478/template-haskell) - задача в том, что хочется делать сплайсинг имён в объявлениях. И я предложил вариант ухода от этой проблемы. Но в заключении того поста я сформулировал недостаток того подхода - с помощью оператора `(^=)` можно объявлять только _значения_, то есть если нужна функция с несколькими клозами:
 
 ``` haskell
-    foo :: Num a ⇒ a → String
+    foo :: Num a => a → String
     foo x 1 = show (x + 23)
     foo x 2 = show (x - 98)
     foo x _ = show x ++ "blah-blah"
@@ -28,7 +28,7 @@ _(репост из [tumblr](http://laughedelic.tumblr.com/post/12217333091/th-s
 ``` haskell
     fooTemplate :: String → Int → Int → String → Q [Dec]
     fooTemplate name y z blah =
-        qDecs [ name ^:: [t| Num a ⇒ a → String |]
+        qDecs [ name ^:: [t| Num a => a → String |]
               , name ^= [| λ a b → case (a,b) of
                             (x,1) → show (x + y)
                             (x,2) → show (x - z)
@@ -49,7 +49,7 @@ _(репост из [tumblr](http://laughedelic.tumblr.com/post/12217333091/th-s
 ``` haskell
     fooTemplate :: String → Int → Int → String → Q [Dec]
     fooTemplate name y z blah = ...
-        [d| foo :: Num a ⇒ a → a → String
+        [d| foo :: Num a => a → a → String
             foo x 1 = show $ x + y
             foo x 2 = show $ x - z
             foo x _ = show x ++ blah
@@ -135,7 +135,7 @@ _(репост из [tumblr](http://laughedelic.tumblr.com/post/12217333091/th-s
     map (substName (rename namesMap)) :: [Dec] → [Dec]
 ```
 
-А для того чтобы теперь _поднять_ эту функцию ещё на уровень выше - в монаду Q, нужно применить функцию `liftM :: Monad m ⇒ (a → b) → (m a → m b)`:
+А для того чтобы теперь _поднять_ эту функцию ещё на уровень выше - в монаду Q, нужно применить функцию `liftM :: Monad m => (a → b) → (m a → m b)`:
 
 ``` haskell
     (liftM (map (substName (rename namesMap)))) :: Q [Dec] → Q [Dec]
@@ -155,7 +155,7 @@ _(репост из [tumblr](http://laughedelic.tumblr.com/post/12217333091/th-s
 ``` haskell
     fooTemplate :: String → Int → Int → String → Q [Dec]
     fooTemplate name y z blah = renameDecs [("foo", name)]
-        [d| foo :: Num a ⇒ a → a → String
+        [d| foo :: Num a => a → a → String
             foo x 1 = show $ x + y
             foo x 2 = show $ x - z
             foo x _ = show x ++ blah

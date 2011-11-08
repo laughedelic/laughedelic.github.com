@@ -7,7 +7,6 @@ categories:
  - frpog
  - Haskell
  - Template Haskell
- - TH
 ---
 
 _(репост из [tumblr](http://laughedelic.tumblr.com/post/11969113478/template-haskell))_
