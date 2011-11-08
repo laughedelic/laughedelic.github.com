@@ -17,7 +17,7 @@
     }
     span { color: $base01 !important; }
     padding: .8em !important;
-    @include border-radius(0);
+    @include border-radius(.3em);
   }
   border: 1px solid $pre-border !important;
 }
@@ -208,18 +208,20 @@ pre, .highlight, .gist-highlight {
 
 .highlight code { @extend .pre-code; background: #000;}
 figure.code {
-  background: none;
+  background: $noise-bg;
   padding: 0;
   border: 0;
   margin-bottom: 1.5em;
   pre { margin-bottom: 0; }
   figcaption {
-    position: relative;
+    position: relative; top: .3em;
     @extend .code-title;
     a { @extend .download-source; }
   }
   .highlight {
     margin-bottom: 0;
+    border: 1px solid $pre-border;
+    @include border-radius(.3em);
   }
 }
 
