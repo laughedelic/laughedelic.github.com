@@ -21,8 +21,3 @@ categories:
 
 Дальше буду менять потихоньку оформление, прикручивать интересные плагины и перетащу сюда с [Tumblr] содержательные посты о программировании.
 
-[Octopress]: http://octopress.org
-[GitHub]: https://github.com/laughedelic/laughedelic.github.com
-[Tumblr]: http://laughedelic.tumblr.com
-[Hakyll]: http://jaspervdj.be/hakyll
-[Jekyll]: https://github.com/mojombo/jekyll/wiki
