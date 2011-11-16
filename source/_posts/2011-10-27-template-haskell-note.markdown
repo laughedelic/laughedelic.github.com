@@ -136,13 +136,15 @@ _(репост из [tumblr](http://laughedelic.tumblr.com/post/11969113478/temp
 
 Эту штуку мы получили вообще даром. Для справки тип `mapM :: Monad m => (a → m b) → [a] → m [b]`, а `Q` - это кстати монада цитирования (от "Quote").
 
+**UPDATE:** что-то я забыл (спасибо eminglorion за напоминание), что есть стандартная функция `sequence ::  Monad m => [m a] → m [a]`, которая как раз делает то же самое. Так что дальше я везде исправлю `qDecs` на `sequence`.
+
 Итак, генератор, а правильнее сказать шаблон, который я хотел получить с самого начала будет выглядеть так:
 
 ``` haskell
-    defFooFunc name content = 
-        qDecs [ name ^:: [t| Foo |]
-              , name ^= [| Bar content |]
-              ]
+    defFooFunc name content = sequence
+        [ name ^:: [t| Foo |]
+        , name ^= [| Bar content |]
+        ]
 ```
 
 Ура!!! `'\(^__^)/'`  Симпатично получилось, правда? 
@@ -187,14 +189,14 @@ _(репост из [tumblr](http://laughedelic.tumblr.com/post/11969113478/temp
 
 ``` haskell
     fooTemplate :: Num a => String → a → a → String → Q [Dec]
-    fooTemplate name y z blah =
-        qDecs [ name ^:: [t| Num a => a → String |]
-              , name ^= [| λ a b → case (a,b) of
-                            (x,1) → show (x + y)
-                            (x,2) → show (x - z)
-                            (x,_) → show x ++ blah
-                        |]
-              ] 
+    fooTemplate name y z blah = sequence
+        [ name ^:: [t| Num a => a → String |]
+        , name ^= [| λ a b → case (a,b) of
+                      (x,1) → show (x + y)
+                      (x,2) → show (x - z)
+                      (x,_) → show x ++ blah
+                  |]
+        ] 
 ```
 
 Ну и соответственно `$(fooTemplate "foo" 23 98 "blah-blah")` сплайсится в то определение, которое мы рассматриваем. Нет, ну конечно не в то же самое. Да, там было три клоза, а у в шаблоне один.. Ну и что, функция ведь получилась такая же. Может кто-нибудь знает, почему не такая же - буду рад узнать.

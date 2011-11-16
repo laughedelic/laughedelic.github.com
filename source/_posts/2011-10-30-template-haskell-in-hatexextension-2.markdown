@@ -34,8 +34,8 @@ _(репост из [tumblr](http://laughedelic.tumblr.com/post/12091298710/hate
 ``` haskell
     defFusedOperators :: [String]   -- ^ strings with operator names
                        →  Q [Dec]   -- ^ top-level declaration
-    defFusedOperators list = 
-        qDecs [ concat ops ^= body ops | ops ← (map words list) ]
+    defFusedOperators list = sequence
+        [ concat ops ^= body ops | ops ← (map words list) ]
         where 
             body, fuse :: [String] → Q Exp
             body ops = [| λ a b → a ◇ $(fuse ops) ◇ b |]

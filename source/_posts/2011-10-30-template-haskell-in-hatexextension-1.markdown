@@ -68,10 +68,10 @@ _(репост из [tumblr](http://laughedelic.tumblr.com/post/12087955995/temp
                    → String   -- ^ TeX command name
                    → Q [Dec]  -- ^ top-level declaration
     defTeXCommand  ""  comm = defTeXCommand comm comm
-    defTeXCommand name comm = 
-        qDecs [ name ^:: [t| LaTeX |]
-              , name ^= [| TeXComm comm [] |]
-              ]
+    defTeXCommand name comm = sequence
+        [ name ^:: [t| LaTeX |]
+        , name ^= [| TeXComm comm [] |]
+        ]
 ```
 
 Вроде бы выглядит достаточно просто и понятно. Объявляем функцию: сигнатура, определение. Тип процитирован, тело процитировано. В теле есть подстановка `comm`, которая заменится на соответствующую строку.
@@ -97,10 +97,10 @@ _(репост из [tumblr](http://laughedelic.tumblr.com/post/12087955995/temp
                    → [String]   -- ^ operator names
                    →  Q [Dec]
     defTeXCommand  ""  comm ops = defTeXCommand comm comm ops
-    defTeXCommand name comm ops = 
-        qDecs $ [ name ^:: [t| LaTeX |]
-                , name ^= body
-                ] ++ (concatMap opDec ops)
+    defTeXCommand name comm ops = sequence $
+        [ name ^:: [t| LaTeX |]
+        , name ^= body
+        ] ++ (concatMap opDec ops)
         where
             body = [| TeXComm comm [] |]
             opDec op = [ op ^:: [t| LaTeX → LaTeX → LaTeX |]
@@ -156,12 +156,11 @@ _(репост из [tumblr](http://laughedelic.tumblr.com/post/12087955995/temp
 Я понял, как можно сплайсить имя созданной функции, вместо `body`:
 
 ``` haskell
-    defTeXCommand name comm ops = 
-        qDecs $ [ name ^:: [t| LaTeX |]
-                , name ^= [| TeXComm comm [] |]
-                ] ++ (concatMap opDec ops)
+    defTeXCommand name comm ops = sequence $
+        [ name ^:: [t| LaTeX |]
+        , name ^= [| TeXComm comm [] |]
+        ] ++ (concatMap opDec ops)
         where
-            
             opDec op = [ op ^:: [t| LaTeX → LaTeX → LaTeX |]
                        , op ^= [| λ a b → a ◇ $(dyn name) ◇ b |]
                        ]
