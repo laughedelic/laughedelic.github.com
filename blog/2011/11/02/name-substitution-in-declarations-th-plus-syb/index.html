@@ -1,0 +1,447 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Подстановка имён в шаблонах объявлений (TH + SYB) - Laughedelic's Octopress Blog</title>
+	<meta name="author" content="laughedelic">
+
+	
+	<meta name="description" content="(репост из tumblr) Всё, пишу последний пост про свои велосипеды. Дальше буду переводить туториалы и делать уже что-нибудь более содержательное. И то &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Laughedelic's Octopress Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Laughedelic's Octopress Blog</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:laughedelic.github.com">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/laughedelic" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/laughedelic" title="GitHub">GitHub</a>
+		
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:laughedelic.github.com">
+	</form>
+</nav>
+
+</header>
+	
+		
+<div id="banner" class="inner">
+	<div class="container">
+		<ul class="feed"></ul>
+	</div>
+	<small><a href="http://twitter.com/laughedelic">laughedelic</a> @ <a href="http://twitter.com">Twitter</a></small>
+	<div class="loading">Loading...</div>
+</div>
+<script src="/javascripts/twitter.js"></script>
+<script type="text/javascript">
+	(function($){
+		$('#banner').getTwitterFeed('laughedelic', 4, false);
+	})(jQuery);
+</script>
+
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Подстановка имён в шаблонах объявлений (TH + SYB)</h2>
+	<div class="entry-content"><p><em>(репост из <a href="http://laughedelic.tumblr.com/post/12217333091/th-syb">tumblr</a>)</em></p>
+
+<p>Всё, пишу последний пост про свои велосипеды. Дальше буду переводить туториалы и делать уже что-нибудь более содержательное. И то, в свободное от учёбы время - надо сконцентрироваться на дипломе..</p>
+
+<p>Итак, напомню, в чём заключается задача. Я писал об этом в <a href="http://laughedelic.github.com/blog/2011/10/27/template-haskell-note/">первом посте о Template Haskell</a> - задача в том, что хочется делать сплайсинг имён в объявлениях. И я предложил вариант ухода от этой проблемы. Но в заключении того поста я сформулировал недостаток того подхода - с помощью оператора <code>(^=)</code> можно объявлять только <em>значения</em>, то есть если нужна функция с несколькими клозами:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">foo</span> <span class="ow">::</span> <span class="kt">Num</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="n">a</span> <span class="err">→</span> <span class="kt">String</span>
+</span><span class='line'><span class="nf">foo</span> <span class="n">x</span> <span class="mi">1</span> <span class="ow">=</span> <span class="n">show</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">23</span><span class="p">)</span>
+</span><span class='line'><span class="nf">foo</span> <span class="n">x</span> <span class="mi">2</span> <span class="ow">=</span> <span class="n">show</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">98</span><span class="p">)</span>
+</span><span class='line'><span class="nf">foo</span> <span class="n">x</span> <span class="kr">_</span> <span class="ow">=</span> <span class="n">show</span> <span class="n">x</span> <span class="o">++</span> <span class="s">&quot;blah-blah&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>то чтобы сделать шаблон, нужно будет запихнуть все клозы в цитату тела:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">fooTemplate</span> <span class="ow">::</span> <span class="kt">String</span> <span class="err">→</span> <span class="kt">Int</span> <span class="err">→</span> <span class="kt">Int</span> <span class="err">→</span> <span class="kt">String</span> <span class="err">→</span> <span class="kt">Q</span> <span class="p">[</span><span class="kt">Dec</span><span class="p">]</span>
+</span><span class='line'><span class="nf">fooTemplate</span> <span class="n">name</span> <span class="n">y</span> <span class="n">z</span> <span class="n">blah</span> <span class="ow">=</span> <span class="n">sequence</span>
+</span><span class='line'>    <span class="p">[</span> <span class="n">name</span> <span class="o">^::</span> <span class="p">[</span><span class="n">t</span><span class="o">|</span> <span class="kt">Num</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="n">a</span> <span class="err">→</span> <span class="kt">String</span> <span class="o">|</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">,</span> <span class="n">name</span> <span class="o">^=</span> <span class="p">[</span><span class="o">|</span> <span class="err">λ</span> <span class="n">a</span> <span class="n">b</span> <span class="err">→</span> <span class="kr">case</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="kr">of</span>
+</span><span class='line'>                  <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="err">→</span> <span class="n">show</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="err">→</span> <span class="n">show</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">z</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="kr">_</span><span class="p">)</span> <span class="err">→</span> <span class="n">show</span> <span class="n">x</span> <span class="o">++</span> <span class="n">blah</span>
+</span><span class='line'>              <span class="o">|</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Это конечно выглядит так себе. Мне не нравится это ограничение такого подхода. Ещё раз повторюсь, я хочу <strong>чтобы шаблон выглядел максимально похожим на то, что он определяет</strong>.</p>
+
+<p>И я нашёл решение. Даже два:</p>
+
+<ul>
+<li> Одно - в лоб, оно не гибкое, не красивое, для него нужно явно пользоваться конструкторами синтаксиса (чего я пытался до этого избежать), но зато простое (в смысле прямолинейное) и в ключе данной локальной задачи вполне подходит.</li>
+<li> Второе решение использует крутую технику - Scrap Your Boilerplate (SYB). Для него нужно немного прокачать своё haskell-fu, но это в любом случае стоит того и на самом деле вовсе не так сложно. То есть я на самом деле не постиг пока всех глубин Generic Programming, посредством SYB, но узнал о том, что это такое в принципе и как этим пользоваться в простейших случаях.</li>
+</ul>
+
+
+<p>Я хочу, чтобы мой шаблон выглядел как-то так:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">fooTemplate</span> <span class="ow">::</span> <span class="kt">String</span> <span class="err">→</span> <span class="kt">Int</span> <span class="err">→</span> <span class="kt">Int</span> <span class="err">→</span> <span class="kt">String</span> <span class="err">→</span> <span class="kt">Q</span> <span class="p">[</span><span class="kt">Dec</span><span class="p">]</span>
+</span><span class='line'><span class="nf">fooTemplate</span> <span class="n">name</span> <span class="n">y</span> <span class="n">z</span> <span class="n">blah</span> <span class="ow">=</span> <span class="o">...</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">d</span><span class="o">|</span> <span class="n">foo</span> <span class="ow">::</span> <span class="kt">Num</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="n">a</span> <span class="err">→</span> <span class="n">a</span> <span class="err">→</span> <span class="kt">String</span>
+</span><span class='line'>        <span class="n">foo</span> <span class="n">x</span> <span class="mi">1</span> <span class="ow">=</span> <span class="n">show</span> <span class="o">$</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+</span><span class='line'>        <span class="n">foo</span> <span class="n">x</span> <span class="mi">2</span> <span class="ow">=</span> <span class="n">show</span> <span class="o">$</span> <span class="n">x</span> <span class="o">-</span> <span class="n">z</span>
+</span><span class='line'>        <span class="n">foo</span> <span class="n">x</span> <span class="kr">_</span> <span class="ow">=</span> <span class="n">show</span> <span class="n">x</span> <span class="o">++</span> <span class="n">blah</span>
+</span><span class='line'>      <span class="o">|</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>То есть цитата будет буквально содержать объявление функции с несколькими клозами и будет содержать явные элементы для подстановки: <code>y, z, blah</code>, они стоят в выражении и с ними ничего делать не надо, и есть один &#8220;неявный&#8221; placeholder (держатель места) - имя функции <code>foo</code>, которое мы хотим заменить на значение параметра <code>name</code>. А вот место, где стоит троеточие - это и будет наше решение, механизм подстановки этого имени.</p>
+
+<!-- more -->
+
+
+<h2>Скучное решение</h2>
+
+<p>Начнём с простого, но скучного решения, чтобы потом увидеть преимущества продвинутого решения.</p>
+
+<p>Итак, цель - замена имени в декларации. Так и напишем:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">substName</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Name</span> <span class="err">→</span> <span class="kt">Name</span><span class="p">)</span> <span class="err">→</span> <span class="p">(</span><span class="kt">Dec</span> <span class="err">→</span> <span class="kt">Dec</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>то есть <code>substName</code> (от substitute name) принимает функцию меняющую одни имена на другие, а выдаёт функцию, которая проделывает эту замену внутри деклараций. Как же она выглядит? А выглядит она стрёмно, приготовьтесь:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">substName</span> <span class="n">f</span> <span class="p">(</span><span class="kt">SigD</span>    <span class="n">name</span>  <span class="n">typ</span><span class="p">)</span> <span class="ow">=</span>
+</span><span class='line'>             <span class="kt">SigD</span> <span class="p">(</span><span class="n">f</span> <span class="n">name</span><span class="p">)</span> <span class="n">typ</span>
+</span><span class='line'><span class="nf">substName</span> <span class="n">f</span> <span class="p">(</span><span class="kt">FunD</span>    <span class="n">name</span>  <span class="n">clauses</span><span class="p">)</span> <span class="ow">=</span>
+</span><span class='line'>             <span class="kt">FunD</span> <span class="p">(</span><span class="n">f</span> <span class="n">name</span><span class="p">)</span> <span class="n">clauses</span>
+</span><span class='line'><span class="nf">substName</span> <span class="n">f</span> <span class="p">(</span><span class="kt">DataD</span> <span class="n">cxt</span>    <span class="n">name</span>  <span class="n">tyVarBndr</span> <span class="n">con</span> <span class="n">dervs</span><span class="p">)</span> <span class="ow">=</span>
+</span><span class='line'>             <span class="kt">DataD</span> <span class="n">cxt</span> <span class="p">(</span><span class="n">f</span> <span class="n">name</span><span class="p">)</span> <span class="n">tyVarBndr</span> <span class="n">con</span> <span class="n">dervs</span>
+</span><span class='line'><span class="nf">substName</span> <span class="n">f</span> <span class="p">(</span><span class="kt">NewtypeD</span> <span class="n">cxt</span>    <span class="n">name</span>  <span class="n">tyVarBndr</span> <span class="n">con</span> <span class="n">dervs</span><span class="p">)</span> <span class="ow">=</span>
+</span><span class='line'>             <span class="kt">NewtypeD</span> <span class="n">cxt</span> <span class="p">(</span><span class="n">f</span> <span class="n">name</span><span class="p">)</span> <span class="n">tyVarBndr</span> <span class="n">con</span> <span class="n">dervs</span>
+</span><span class='line'><span class="nf">substName</span> <span class="n">f</span> <span class="p">(</span><span class="kt">TySynD</span>    <span class="n">name</span>  <span class="n">tyVarBndr</span> <span class="n">typ</span><span class="p">)</span> <span class="ow">=</span>
+</span><span class='line'>             <span class="kt">TySynD</span> <span class="p">(</span><span class="n">f</span> <span class="n">name</span><span class="p">)</span> <span class="n">tyVarBndr</span> <span class="n">typ</span>
+</span><span class='line'><span class="nf">substName</span> <span class="n">f</span> <span class="p">(</span><span class="kt">ClassD</span> <span class="n">cxt</span>    <span class="n">name</span>  <span class="n">tyVarBndr</span> <span class="n">funDep</span> <span class="n">dec</span><span class="p">)</span> <span class="ow">=</span>
+</span><span class='line'>             <span class="kt">ClassD</span> <span class="n">cxt</span> <span class="p">(</span><span class="n">f</span> <span class="n">name</span><span class="p">)</span> <span class="n">tyVarBndr</span> <span class="n">funDep</span> <span class="n">dec</span>
+</span><span class='line'><span class="nf">substName</span> <span class="kr">_</span> <span class="n">dec</span> <span class="ow">=</span> <span class="n">dec</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Устроена эта функция очень просто: она берёт декларацию в виде структуры данных описания синтаксиса (фу), и выдаёт её же, но применив при этом функцию замены имени. Обратите внимание на следующий момент: я написал только несколько вариантов деклараций (сигнатура, объявление функции, структура данных, newtype, синоним типа и класс), для остальных же деклараций срабатывает последний клоз - ничего не меняется.</p>
+
+<p>То есть эта функция не универсальна, причём в двух аспектах:</p>
+
+<ul>
+<li> Cрабатывает не для всех деклараций. Это поправимый недостаток - надо просто дописать ещё 8 клозов (см. определение <a href="http://www.haskell.org/ghc/docs/latest/html/libraries/template-haskell-2.6.0.0/Language-Haskell-TH-Syntax.html#t:Dec"><code>Dec</code></a>).</li>
+<li> Заменяет имя только на верхнем уровне. Имена могут встречаться глубже - в &#8220;теле&#8221; декларации.</li>
+</ul>
+
+
+<p>В рамках поставленной задачи, это не важно, потому что мы хотим менять только имя функции в сигнатуре и определении, так что нам бы хватило определения только с первыми двумя клозами и последним. Но всё же.. Вдруг потом нам захочется большего&#8230;</p>
+
+<p>Ладно, теперь сделаем нашу <code>f</code> - функцию меняющую имена, так чтобы она брала список пар строк, которые собственно и означают замену первое на второе:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="kr">type</span> <span class="kt">NamesMap</span> <span class="ow">=</span> <span class="p">[(</span><span class="kt">String</span><span class="p">,</span> <span class="kt">String</span><span class="p">)]</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">rename</span> <span class="ow">::</span> <span class="kt">NamesMap</span> <span class="err">→</span> <span class="p">(</span><span class="kt">Name</span> <span class="err">→</span> <span class="kt">Name</span><span class="p">)</span>
+</span><span class='line'><span class="nf">rename</span> <span class="n">namesMap</span> <span class="ow">=</span> <span class="err">λ</span> <span class="n">oldName</span> <span class="err">→</span>
+</span><span class='line'>    <span class="kr">case</span> <span class="n">lookup</span> <span class="p">(</span><span class="n">show</span> <span class="n">oldName</span><span class="p">)</span> <span class="n">namesMap</span> <span class="kr">of</span>
+</span><span class='line'>         <span class="kt">Nothing</span>  <span class="err">→</span> <span class="n">oldName</span>
+</span><span class='line'>         <span class="kt">Just</span> <span class="n">new</span> <span class="err">→</span> <span class="n">mkName</span> <span class="n">new</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Функция <code>lookup</code> из <code>Data.List</code> смотрит есть данный элемент в списке пар, в качестве ключа, если есть возвращает соответствующее значение (<code>Just new</code>), из которого мы делаем новое имя (<code>mkName new</code>), если нет - <code>Nothing</code> и мы ничего не заменяем.</p>
+
+<!--
+Можно сделать интереснее - например сделать placeholder'ы универсальными, со специальным синтаксисом типа `__foo`, чтобы они заменялись на тот идентификатор из контекста, который стоит после этого `__`. Да, пожалуй, так будет круче - это же самый натуральный сплайсинг!
+
+    spliceName :: Name → Name
+    spliceName nam = 
+        case (show nam) of 
+             ('_':'_':foo) → mkName foo
+                   _       → nam
+
+То есть функция берёт имя, делает из него строку, смотрит, есть ли префикс, если есть, то извлекает оставшуюся часть и делает из неё новое имя (`mkName foo`), а если префикса нет, то возвращает то, что было.
+-->
+
+
+<p>Хорошо, словарик мы обеспечим (пока пусть называется <code>namesMap</code>), теперь нужно её как-то применить к нашим процитированным декларациям. Посмотрим на тип комбинации <code>substName</code> и <code>rename namesMap</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">substName</span> <span class="p">(</span><span class="n">rename</span> <span class="n">namesMap</span><span class="p">)</span> <span class="ow">::</span> <span class="kt">Dec</span> <span class="err">→</span> <span class="kt">Dec</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Так, теперь на тип цитаты: <code>[d| ... |] :: Q [Dec]</code>. Такой же и возвращаемый тип шаблона. То есть нам надо сделать преобразование <code>Dec → Dec</code> внутри <code>Q [Dec]</code>. Чтобы сделать это для <code>[Dec]</code>, достаточно применить <code>map</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">map</span> <span class="p">(</span><span class="n">substName</span> <span class="p">(</span><span class="n">rename</span> <span class="n">namesMap</span><span class="p">))</span> <span class="ow">::</span> <span class="p">[</span><span class="kt">Dec</span><span class="p">]</span> <span class="err">→</span> <span class="p">[</span><span class="kt">Dec</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>А для того чтобы теперь <em>поднять</em> эту функцию ещё на уровень выше - в монаду Q, нужно применить функцию <code>liftM :: Monad m =&gt; (a → b) → (m a → m b)</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="p">(</span><span class="n">liftM</span> <span class="p">(</span><span class="n">map</span> <span class="p">(</span><span class="n">substName</span> <span class="p">(</span><span class="n">rename</span> <span class="n">namesMap</span><span class="p">))))</span> <span class="ow">::</span> <span class="kt">Q</span> <span class="p">[</span><span class="kt">Dec</span><span class="p">]</span> <span class="err">→</span> <span class="kt">Q</span> <span class="p">[</span><span class="kt">Dec</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Что и требовалось. На самом деле список - это же тоже монада, так что мы могли бы написать не <code>map</code>, а ещё один <code>liftM</code>, но ладно, не суть.</p>
+
+<p>Ну и всю эту штуковину надо как-то обозначить, убрав попутно лишние скобки:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">renameDecs</span> <span class="ow">::</span> <span class="kt">NamesMap</span> <span class="err">→</span> <span class="kt">Q</span> <span class="p">[</span><span class="kt">Dec</span><span class="p">]</span> <span class="err">→</span> <span class="kt">Q</span> <span class="p">[</span><span class="kt">Dec</span><span class="p">]</span>
+</span><span class='line'><span class="nf">renameDecs</span> <span class="n">namesMap</span> <span class="ow">=</span> <span class="n">liftM</span> <span class="o">$</span> <span class="n">map</span> <span class="o">$</span> <span class="n">substName</span> <span class="o">$</span> <span class="n">rename</span> <span class="n">namesMap</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Итак, у нас уже есть все требуемые элементы, осталось собрать их воедино:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">fooTemplate</span> <span class="ow">::</span> <span class="kt">String</span> <span class="err">→</span> <span class="kt">Int</span> <span class="err">→</span> <span class="kt">Int</span> <span class="err">→</span> <span class="kt">String</span> <span class="err">→</span> <span class="kt">Q</span> <span class="p">[</span><span class="kt">Dec</span><span class="p">]</span>
+</span><span class='line'><span class="nf">fooTemplate</span> <span class="n">name</span> <span class="n">y</span> <span class="n">z</span> <span class="n">blah</span> <span class="ow">=</span> <span class="n">renameDecs</span> <span class="p">[(</span><span class="s">&quot;foo&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">d</span><span class="o">|</span> <span class="n">foo</span> <span class="ow">::</span> <span class="kt">Num</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="n">a</span> <span class="err">→</span> <span class="n">a</span> <span class="err">→</span> <span class="kt">String</span>
+</span><span class='line'>        <span class="n">foo</span> <span class="n">x</span> <span class="mi">1</span> <span class="ow">=</span> <span class="n">show</span> <span class="o">$</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+</span><span class='line'>        <span class="n">foo</span> <span class="n">x</span> <span class="mi">2</span> <span class="ow">=</span> <span class="n">show</span> <span class="o">$</span> <span class="n">x</span> <span class="o">-</span> <span class="n">z</span>
+</span><span class='line'>        <span class="n">foo</span> <span class="n">x</span> <span class="kr">_</span> <span class="ow">=</span> <span class="n">show</span> <span class="n">x</span> <span class="o">++</span> <span class="n">blah</span>
+</span><span class='line'>      <span class="o">|</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Вот и весь шаблон. То есть мы действительно только заполнили троеточие, оставив цитату нетронутой и полностью соответствующей виду результата (по модулю подстановок).</p>
+
+<p>По-моему получилось вполне удобно и симпатично. И делать для этого пришлось не так много: <code>substName</code> → <code>rename</code> → <code>renameDecs</code>. Единственное неудобное место в этой цепочке - это громоздкая функция <code>substName</code>.</p>
+
+<h2>Решение с помощью SYB</h2>
+
+<p>Собственно, второе решение и будет отличаться только определением функции <code>substName</code>. Остальное достаточно универсально и просто.</p>
+
+<p>SYB расшифровывается как Scrap Your Boilerplate и это можно перевести как &#8220;Выброси свой говнокод&#8221;, или лучше как в этой презентации: <a href="http://spbhug.folding-maps.org/wiki/Scrap_Your_Boilerplate_%26_Uniplate?action=AttachFile&amp;do=get&amp;target=syb-uniplate.pdf">&#8220;Вычистим скучный код&#8221;</a> Ивана Тарасова. Она на русском, включает в себя в некотором виде оф. презентацию SYB и рассматривает альтернативу - Uniplate. Так что всем рекомендую.</p>
+
+<p>Смысл функции <code>substName</code> очень простой - мы хотим подействовать функцией <code>f :: Name → Name</code> на все вхождения <code>Name</code> внутри декларации <code>Dec</code>, а вся эта сложная структура типа <code>Dec</code> нас не интересует. Ну вот SYB как раз и позволяет абстрагироваться нам от этой структуры и написать прямо то, что мы хотим:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">substName</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Name</span> <span class="err">→</span> <span class="kt">Name</span><span class="p">)</span> <span class="err">→</span> <span class="p">(</span><span class="kt">Dec</span> <span class="err">→</span> <span class="kt">Dec</span><span class="p">)</span>
+</span><span class='line'><span class="nf">substName</span> <span class="n">f</span> <span class="ow">=</span> <span class="n">everywhere</span> <span class="p">(</span><span class="n">mkT</span> <span class="n">f</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Дословно - сделать из <code>f</code> универсальную трансформацию (<code>mkT</code> - &#8220;make transformation&#8221;), применить её везде (<code>everywhere</code>). Разве не замечательно? Просто чудесно! Тот ужасный, гов<sup>W</sup> скучный код заменился на всего два слова и притом они довольно прозрачно отражают суть происходящего (если хочется понимания того, как это устроено, поможет презентация, на которую я дал ссылку выше).</p>
+
+<p>С таким определением функция <code>substName</code> нам вообще особо не нужна. Можно сразу написать определением <code>renameDecs</code> без неё, заодно избавившись от скобочек:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">renameDecs</span> <span class="ow">::</span> <span class="kt">NamesMap</span> <span class="err">→</span> <span class="kt">Q</span> <span class="p">[</span><span class="kt">Dec</span><span class="p">]</span> <span class="err">→</span> <span class="kt">Q</span> <span class="p">[</span><span class="kt">Dec</span><span class="p">]</span>
+</span><span class='line'><span class="nf">renameDecs</span> <span class="n">namesMap</span> <span class="ow">=</span> <span class="n">liftM</span> <span class="o">$</span> <span class="n">map</span> <span class="o">$</span> <span class="n">everywhere</span> <span class="o">$</span> <span class="n">mkT</span> <span class="o">$</span> <span class="n">rename</span> <span class="n">namesMap</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ну и тут можно заметить, что в этой цепочке <code>map</code> становится лишним - <code>everywhere</code> может абстрагировать преобразование не только до <code>Dec → Dec</code>, но и до <code>[Dec] → [Dec]</code> - за бесплатно:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">renameDecs</span> <span class="n">namesMap</span> <span class="ow">=</span> <span class="n">liftM</span> <span class="o">$</span> <span class="n">everywhere</span> <span class="o">$</span> <span class="n">mkT</span> <span class="o">$</span> <span class="n">rename</span> <span class="n">namesMap</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>К сожалению написать это в стиле point-free не получается, из-за специфичных типов <code>everywhere</code> и <code>mkT</code>. Но даже так, это выглядит довольно хорошо. И при всей своей изящности, это решение лишено тех недостатков, о которых я говорил в первом случае.</p>
+
+<p>Второе решение полностью можно посмотреть тут: <a href="http://gist.github.com/1332269">GitHub gist</a>.</p>
+
+<p>Итого, не считая необязательные сигнатуры, это решение в итоге укладывается всего в <em>5 строчек кода</em>. Прекрасно! ^_^</p>
+
+<p>Для частной задачи получилось здорово. Но всё же это велосипед, потому что QuasiQuoting позволяет делать не только такие подстановки, но и любые другие, то есть расцитирование в любом месте, с любым синтаксисом и для любого DSL. Это конечно круто. Но этого, насколько я знаю, для моей задачи из коробки нету и там тоже надо будет что-то сделать/дополнить, что конечно будет круче и универсальнее, но не совсем очевидно. Этим я займусь в следующий раз. По плану, дальше перевод вводного туториала по TH, потом по QQ, а потом уже и новые <strike>велоси</strike> эксперименты с мета-программированием в общем и QQ в частности.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-02T02:59:00+01:00" pubdate data-updated="true">Nov 2<span>nd</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/haskell/'>Haskell</a>, <a class='category' href='/blog/categories/syb/'>SYB</a>, <a class='category' href='/blog/categories/template-haskell/'>Template Haskell</a>, <a class='category' href='/blog/categories/frpog/'>frpog</a>
+
+
+</div>
+	
+		<div class="comments"><a href="/blog/2011/11/02/name-substitution-in-declarations-th-plus-syb/#disqus_thread">Comments</a></div>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2013
+
+    laughedelic
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'laughedelic-octopress';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://laughedelic.github.com/blog/2011/11/02/name-substitution-in-declarations-th-plus-syb/';
+        var disqus_url = 'http://laughedelic.github.com/blog/2011/11/02/name-substitution-in-declarations-th-plus-syb/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-26841089-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

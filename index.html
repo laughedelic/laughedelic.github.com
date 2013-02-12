@@ -1,1 +1,622 @@
-My Octopress Page is coming soon &hellip;
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Laughedelic's Octopress Blog</title>
+	<meta name="author" content="laughedelic">
+
+	
+	<meta name="description" content="Ура! Я сгенерил этот блог с помощью замечательного Octopress и разместил его на GitHub. Теперь я перееду с Tumblr и сделаю тут самый уютный и &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Laughedelic's Octopress Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Laughedelic's Octopress Blog</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:laughedelic.github.com">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/laughedelic" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/laughedelic" title="GitHub">GitHub</a>
+		
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:laughedelic.github.com">
+	</form>
+</nav>
+
+</header>
+	
+		
+<div id="banner" class="inner">
+	<div class="container">
+		<ul class="feed"></ul>
+	</div>
+	<small><a href="http://twitter.com/laughedelic">laughedelic</a> @ <a href="http://twitter.com">Twitter</a></small>
+	<div class="loading">Loading...</div>
+</div>
+<script src="/javascripts/twitter.js"></script>
+<script type="text/javascript">
+	(function($){
+		$('#banner').getTwitterFeed('laughedelic', 4, false);
+	})(jQuery);
+</script>
+
+	
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/11/07/initial-post/">
+		
+			Initial Post</a>
+	</h2>
+	<div class="entry-content">
+		<p><img class="left" src="/images/Octopress.jpg"></p>
+
+<p>Ура! Я сгенерил этот блог с помощью замечательного <a href="http://octopress.org">Octopress</a> и разместил его на <a href="http://github.com/laughedelic/laughedelic.github.com">GitHub</a>. Теперь я перееду с <a href="http://laughedelic.tumblr.com">Tumblr</a> и сделаю тут самый уютный и замечательный бложик со всякими клёвыми свистелками, блекджеком и подсветкой кода в постах конечно! Тумблер тоже останется как эдакая удобная лента для репостов, ссылок, цитат и т.д. и т.п.</p>
+
+
+		
+		<a href="/blog/2011/11/07/initial-post/" class="more-link">Read more &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-07T02:50:00+01:00" pubdate data-updated="true">Nov 7<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+</div>
+	
+		<div class="comments"><a href="/blog/2011/11/07/initial-post//index.html#disqus_thread">Comments</a></div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/11/02/name-substitution-in-declarations-th-plus-syb/">
+		
+			Подстановка имён в шаблонах объявлений (TH + SYB)</a>
+	</h2>
+	<div class="entry-content">
+		<p><em>(репост из <a href="http://laughedelic.tumblr.com/post/12217333091/th-syb">tumblr</a>)</em></p>
+
+<p>Всё, пишу последний пост про свои велосипеды. Дальше буду переводить туториалы и делать уже что-нибудь более содержательное. И то, в свободное от учёбы время - надо сконцентрироваться на дипломе..</p>
+
+<p>Итак, напомню, в чём заключается задача. Я писал об этом в <a href="http://laughedelic.github.com/blog/2011/10/27/template-haskell-note/">первом посте о Template Haskell</a> - задача в том, что хочется делать сплайсинг имён в объявлениях. И я предложил вариант ухода от этой проблемы. Но в заключении того поста я сформулировал недостаток того подхода - с помощью оператора <code>(^=)</code> можно объявлять только <em>значения</em>, то есть если нужна функция с несколькими клозами:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">foo</span> <span class="ow">::</span> <span class="kt">Num</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="n">a</span> <span class="err">→</span> <span class="kt">String</span>
+</span><span class='line'><span class="nf">foo</span> <span class="n">x</span> <span class="mi">1</span> <span class="ow">=</span> <span class="n">show</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">23</span><span class="p">)</span>
+</span><span class='line'><span class="nf">foo</span> <span class="n">x</span> <span class="mi">2</span> <span class="ow">=</span> <span class="n">show</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">98</span><span class="p">)</span>
+</span><span class='line'><span class="nf">foo</span> <span class="n">x</span> <span class="kr">_</span> <span class="ow">=</span> <span class="n">show</span> <span class="n">x</span> <span class="o">++</span> <span class="s">&quot;blah-blah&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>то чтобы сделать шаблон, нужно будет запихнуть все клозы в цитату тела:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">fooTemplate</span> <span class="ow">::</span> <span class="kt">String</span> <span class="err">→</span> <span class="kt">Int</span> <span class="err">→</span> <span class="kt">Int</span> <span class="err">→</span> <span class="kt">String</span> <span class="err">→</span> <span class="kt">Q</span> <span class="p">[</span><span class="kt">Dec</span><span class="p">]</span>
+</span><span class='line'><span class="nf">fooTemplate</span> <span class="n">name</span> <span class="n">y</span> <span class="n">z</span> <span class="n">blah</span> <span class="ow">=</span> <span class="n">sequence</span>
+</span><span class='line'>    <span class="p">[</span> <span class="n">name</span> <span class="o">^::</span> <span class="p">[</span><span class="n">t</span><span class="o">|</span> <span class="kt">Num</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="n">a</span> <span class="err">→</span> <span class="kt">String</span> <span class="o">|</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">,</span> <span class="n">name</span> <span class="o">^=</span> <span class="p">[</span><span class="o">|</span> <span class="err">λ</span> <span class="n">a</span> <span class="n">b</span> <span class="err">→</span> <span class="kr">case</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="kr">of</span>
+</span><span class='line'>                  <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="err">→</span> <span class="n">show</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="err">→</span> <span class="n">show</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">z</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="kr">_</span><span class="p">)</span> <span class="err">→</span> <span class="n">show</span> <span class="n">x</span> <span class="o">++</span> <span class="n">blah</span>
+</span><span class='line'>              <span class="o">|</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Это конечно выглядит так себе. Мне не нравится это ограничение такого подхода. Ещё раз повторюсь, я хочу <strong>чтобы шаблон выглядел максимально похожим на то, что он определяет</strong>.</p>
+
+<p>И я нашёл решение. Даже два:</p>
+
+<ul>
+<li> Одно - в лоб, оно не гибкое, не красивое, для него нужно явно пользоваться конструкторами синтаксиса (чего я пытался до этого избежать), но зато простое (в смысле прямолинейное) и в ключе данной локальной задачи вполне подходит.</li>
+<li> Второе решение использует крутую технику - Scrap Your Boilerplate (SYB). Для него нужно немного прокачать своё haskell-fu, но это в любом случае стоит того и на самом деле вовсе не так сложно. То есть я на самом деле не постиг пока всех глубин Generic Programming, посредством SYB, но узнал о том, что это такое в принципе и как этим пользоваться в простейших случаях.</li>
+</ul>
+
+
+<p>Я хочу, чтобы мой шаблон выглядел как-то так:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">fooTemplate</span> <span class="ow">::</span> <span class="kt">String</span> <span class="err">→</span> <span class="kt">Int</span> <span class="err">→</span> <span class="kt">Int</span> <span class="err">→</span> <span class="kt">String</span> <span class="err">→</span> <span class="kt">Q</span> <span class="p">[</span><span class="kt">Dec</span><span class="p">]</span>
+</span><span class='line'><span class="nf">fooTemplate</span> <span class="n">name</span> <span class="n">y</span> <span class="n">z</span> <span class="n">blah</span> <span class="ow">=</span> <span class="o">...</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">d</span><span class="o">|</span> <span class="n">foo</span> <span class="ow">::</span> <span class="kt">Num</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="n">a</span> <span class="err">→</span> <span class="n">a</span> <span class="err">→</span> <span class="kt">String</span>
+</span><span class='line'>        <span class="n">foo</span> <span class="n">x</span> <span class="mi">1</span> <span class="ow">=</span> <span class="n">show</span> <span class="o">$</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+</span><span class='line'>        <span class="n">foo</span> <span class="n">x</span> <span class="mi">2</span> <span class="ow">=</span> <span class="n">show</span> <span class="o">$</span> <span class="n">x</span> <span class="o">-</span> <span class="n">z</span>
+</span><span class='line'>        <span class="n">foo</span> <span class="n">x</span> <span class="kr">_</span> <span class="ow">=</span> <span class="n">show</span> <span class="n">x</span> <span class="o">++</span> <span class="n">blah</span>
+</span><span class='line'>      <span class="o">|</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>То есть цитата будет буквально содержать объявление функции с несколькими клозами и будет содержать явные элементы для подстановки: <code>y, z, blah</code>, они стоят в выражении и с ними ничего делать не надо, и есть один &#8220;неявный&#8221; placeholder (держатель места) - имя функции <code>foo</code>, которое мы хотим заменить на значение параметра <code>name</code>. А вот место, где стоит троеточие - это и будет наше решение, механизм подстановки этого имени.</p>
+
+
+		
+		<a href="/blog/2011/11/02/name-substitution-in-declarations-th-plus-syb/" class="more-link">Read more &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-02T02:59:00+01:00" pubdate data-updated="true">Nov 2<span>nd</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/haskell/'>Haskell</a>, <a class='category' href='/blog/categories/syb/'>SYB</a>, <a class='category' href='/blog/categories/template-haskell/'>Template Haskell</a>, <a class='category' href='/blog/categories/frpog/'>frpog</a>
+
+
+</div>
+	
+		<div class="comments"><a href="/blog/2011/11/02/name-substitution-in-declarations-th-plus-syb//index.html#disqus_thread">Comments</a></div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/11/01/hatexextension-at-github/">
+		
+			HaTeXExtension @ GitHub</a>
+	</h2>
+	<div class="entry-content">
+		<p><em>(репост из <a href="http://laughedelic.tumblr.com/post/12173307363">tumblr</a>)</em></p>
+
+<p>Итак, официальный анонс &#8220;)
+Теперь у моего прожекта HaTeXExtension есть своя клёвая страничка на github-pages с мажорным адресом.</p>
+
+<p><a href="http://laughedelic.github.com/HaTeXExtension">http://laughedelic.github.com/HaTeXExtension</a></p>
+
+<p>Плюс там онлайн документация, которую я писал пол-ночи &#8220;/ Ну и сам код на гитхабе.</p>
+
+<p>Кстати, автор <a href="http://dhelta.net/hprojects/HaTeX/">HaTeX</a> (Daniel Díaz) нашёл мою репу на гитхабе раньше, чем я успел всё доделать. При этом он уже перенёс пару фишек в основную версию и дал на меня ссылку в общий mailing-list. Я довольный же! <code>^__^</code></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-01T12:40:00+01:00" pubdate data-updated="true">Nov 1<span>st</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/hatex/'>HaTeX</a>, <a class='category' href='/blog/categories/hatexextension/'>HaTeXExtension</a>, <a class='category' href='/blog/categories/haskell/'>Haskell</a>, <a class='category' href='/blog/categories/frpog/'>frpog</a>
+
+
+</div>
+	
+		<div class="comments"><a href="/blog/2011/11/01/hatexextension-at-github//index.html#disqus_thread">Comments</a></div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/10/30/template-haskell-in-hatexextension-2/">
+		
+			HaTeXExtension + TH: Спаривание операторов</a>
+	</h2>
+	<div class="entry-content">
+		<p><em>(репост из <a href="http://laughedelic.tumblr.com/post/12091298710/hatexextension-th">tumblr</a>)</em></p>
+
+<p>Продолжаю серию дополнений HaTeXExtension с использованием Template Haskell. В этом посте будет пример шаблона с рекурсивным сплайсингом/цитированием.</p>
+
+<p>Кроме отдельных операторов-синонимов, о которых шла речь в предыдущем посте, я определяю иногда их спаренный вариант - это удобно, потому что иногда хочется написать их один за другим, а поотдельности нельзя (каждому из них нужен второй аргумент), а если написать их слитно, то два операторных символа подряд с синтаксической точки зрения - просто новое имя оператора. Вот пример того, что есть сейчас:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">a</span> <span class="err">¸</span> <span class="n">b</span> <span class="ow">=</span> <span class="n">a</span> <span class="err">◇</span> <span class="n">comma</span> <span class="err">◇</span> <span class="n">b</span>
+</span><span class='line'><span class="nf">a</span> <span class="err">⎕</span> <span class="n">b</span> <span class="ow">=</span> <span class="n">a</span> <span class="err">◇</span> <span class="n">space</span> <span class="err">◇</span> <span class="n">b</span>
+</span><span class='line'><span class="nf">a</span> <span class="err">¸⎕</span> <span class="n">b</span> <span class="ow">=</span> <span class="n">a</span> <span class="err">¸</span> <span class="s">&quot;&quot;</span> <span class="err">⎕</span> <span class="n">b</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Хорошо, от первых двух деклараций мы избавились изменив шаблон <code>defTeXCommand</code>. Теперь я хочу сделать шаблон, который будет брать пары операторных символов и генерировать объявление их спаренного варианта. Гм, пошёл делать и понял, что можно брать не пары а списки, чтобы можно было сплавлять сколько угодно операторов.</p>
+
+
+		
+		<a href="/blog/2011/10/30/template-haskell-in-hatexextension-2/" class="more-link">Read more &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-30T02:41:00+01:00" pubdate data-updated="true">Oct 30<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/hatex/'>HaTeX</a>, <a class='category' href='/blog/categories/hatexextension/'>HaTeXExtension</a>, <a class='category' href='/blog/categories/haskell/'>Haskell</a>, <a class='category' href='/blog/categories/template-haskell/'>Template Haskell</a>, <a class='category' href='/blog/categories/frpog/'>frpog</a>
+
+
+</div>
+	
+		<div class="comments"><a href="/blog/2011/10/30/template-haskell-in-hatexextension-2//index.html#disqus_thread">Comments</a></div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/10/30/template-haskell-in-hatexextension-1/">
+		
+			Использование Template Haskell в HaTeXExtension</a>
+	</h2>
+	<div class="entry-content">
+		<p><em>(репост из <a href="http://laughedelic.tumblr.com/post/12087955995/template-haskell-hatexextension">tumblr</a>)</em></p>
+
+<h2>Вступление</h2>
+
+<p>За последние дни я много экспериментировал с Template Haskell и узнал много интересных вещей. Я по прежнему многое ещё не понимаю, но со многими вопросами я разобрался и хочу об этом тут написать. Сразу оговорюсь, что мои ответы скорее всего являются следствием того, что я не умею пока готовить TH, или я просто изобретаю самокаты.</p>
+
+<p>Итак, на этой неделе я уже написал два поста о <a href="http://laughedelic.github.com/blog/2011/10/26/hatex-with-unicode/">HaTeX-3</a> и <a href="http://laughedelic.github.com/blog/2011/10/27/template-haskell-note/">Template Haskell</a>. В последнем посте я ставил вопрос о генерации объявлений с помощью TH и непонятной мне невозможности замены имени объявляемого объекта в цитированном коде. (Ну и оборот завернул, это у меня после написания эссе по философии)</p>
+
+<p>Сегодня я немного поразбирался с квазицитированием (<a href="http://www.haskell.org/haskellwiki/Quasiquotation">Quasiquotation</a>, далее коротко QQ) - ещё одним расширением Haskell&#8217;а, на базе TH. Рекомендую почитать статью по ссылке и разобрать несложный пример - на нём многое становится понятно. Поначалу я недоумевал - ну парсеры, ну с другим синтаксисом, ну и что… Но сегодня я наконец-то осознал в чём истинная сила QQ и обязательно напишу об этом на следующей неделе. У меня уже есть пара идей для реализации с помощью QQ и в том числе для HaTeX.</p>
+
+<h2>Постановка задачи</h2>
+
+<p>Задача на самом деле остаётся та же, что и в предыдущем посте про TH. Только теперь я переформулирую её в контексте моих экспериментов с HaTeX. Поскольку каких-то TeX&#8217;овских команд мне не хватало в HaTeX&#8217;е, я решил написать для него небольшое дополнение. Итак, в моём модуле HaTeXExtension была куча объявлений вида</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">space</span> <span class="ow">::</span> <span class="kt">LaTeX</span>
+</span><span class='line'><span class="nf">space</span> <span class="ow">=</span> <span class="s">&quot; </span><span class="se">\\</span><span class="s">quad &quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">leq</span> <span class="ow">::</span> <span class="kt">LaTeX</span>
+</span><span class='line'><span class="nf">leq</span> <span class="ow">=</span> <span class="s">&quot; </span><span class="se">\\</span><span class="s">leq &quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>и т.п. С переходом на новую версию HaTeX&#8217;а, я переделал их таким образом:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">space</span> <span class="ow">::</span> <span class="kt">LaTeX</span>
+</span><span class='line'><span class="nf">space</span> <span class="ow">=</span> <span class="kt">TeXComm</span> <span class="s">&quot;quad&quot;</span> <span class="kt">[]</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">leq</span> <span class="ow">::</span> <span class="kt">LaTeX</span>
+</span><span class='line'><span class="nf">leq</span> <span class="ow">=</span> <span class="kt">TeXComm</span> <span class="s">&quot;leq&quot;</span> <span class="kt">[]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Это конечно не бог весть какой код, но когда таких функций 10 или 20, мне он всё же кажется достаточно скучным и я нашёл в этом повод для себя попробовать использовать Template Haskell. То есть я хочу генерировать такие объявления автоматически по имени команды и функции. Так что теперь этот код выглядит у меня следующим образом:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">defTeXCommand</span> <span class="s">&quot;space&quot;</span> <span class="s">&quot;quad&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">defTeXCommand</span> <span class="s">&quot;&quot;</span> <span class="s">&quot;leq&quot;</span>     <span class="c1">-- имя функции и команды одинаковые</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Повторюсь, что задача высосана из пальца, но её можно воспринимать как простой пример.</p>
+
+
+		
+		<a href="/blog/2011/10/30/template-haskell-in-hatexextension-1/" class="more-link">Read more &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-30T01:12:00+02:00" pubdate data-updated="true">Oct 30<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/hatex/'>HaTeX</a>, <a class='category' href='/blog/categories/hatexextension/'>HaTeXExtension</a>, <a class='category' href='/blog/categories/haskell/'>Haskell</a>, <a class='category' href='/blog/categories/template-haskell/'>Template Haskell</a>, <a class='category' href='/blog/categories/frpog/'>frpog</a>
+
+
+</div>
+	
+		<div class="comments"><a href="/blog/2011/10/30/template-haskell-in-hatexextension-1//index.html#disqus_thread">Comments</a></div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/10/27/template-haskell-note/">
+		
+			Заметка о Template Haskell</a>
+	</h2>
+	<div class="entry-content">
+		<p><em>(репост из <a href="http://laughedelic.tumblr.com/post/11969113478/template-haskell">tumblr</a>)</em></p>
+
+<h2>Вступление</h2>
+
+<p>На развёрнутый пост о своих многочисленных экспериментах с <a href="http://www.haskell.org/haskellwiki/Template_Haskell">Template Haskell</a> (далее коротко TH) у меня сейчас времени нет, но я его обязательно напишу. В планах даже перевод небольшого туториала.</p>
+
+<p>Эта заметка будет с небольшим вопросом. Я понимаю, что Simon P. Jones (автор TH) борется за чистоту и хочет чтобы везде был строгий контроль типов. На эту тему есть хороший пост в блоге GHC: <a href="http://hackage.haskell.org/trac/ghc/blog/Template%20Haskell%20Proposal">New directions for Template Haskell</a>. Я не всё там понял, но главное, понял, что всем ограничениям (и недоработкам) есть свои причины.</p>
+
+<h2>Постановка задачи</h2>
+
+<p>Мне захотелось написать с помощью TH следующую вещь, в сущности, очень простую: хочу генерить функции с данным именем и части тела. Даже ещё проще, пусть функции без параметров - по сути просто значение данного типа (тип заранее известен). Для простоты, пусть у нас есть такой тип:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="kr">data</span> <span class="kt">Foo</span> <span class="ow">=</span> <span class="kt">Bar</span> <span class="kt">String</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>И мы хотим генерить функции (не функции конечно, а <em>объявления</em>) вида:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">name</span> <span class="ow">::</span> <span class="kt">Foo</span>
+</span><span class='line'><span class="nf">name</span> <span class="ow">=</span> <span class="kt">Bar</span> <span class="n">content</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>где <code>name</code> и <code>content</code> - это заранее неизвестные значения. То есть параметры генератора/шаблона.</p>
+
+
+		
+		<a href="/blog/2011/10/27/template-haskell-note/" class="more-link">Read more &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-27T03:05:00+02:00" pubdate data-updated="true">Oct 27<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/haskell/'>Haskell</a>, <a class='category' href='/blog/categories/template-haskell/'>Template Haskell</a>, <a class='category' href='/blog/categories/frpog/'>frpog</a>
+
+
+</div>
+	
+		<div class="comments"><a href="/blog/2011/10/27/template-haskell-note//index.html#disqus_thread">Comments</a></div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/10/26/hatex-with-unicode/">
+		
+			Про HaTeX 3 и юникод в коде</a>
+	</h2>
+	<div class="entry-content">
+		<p><em>(репост из <a href="http://laughedelic.tumblr.com/post/11922293522/hatex-3">tumblr</a>)</em></p>
+
+<h2>Вступление</h2>
+
+<p>Давненько я не заглядывал сюда и не писал ничего содержательного.
+Но тут в очередной раз есть повод поделиться впечатлениями от новых интересных знаний и к тому же для этого удалось выкроить немного времени.</p>
+
+<p>Итак, я дождался таки выхода в свет 3й версии библиотеки <a href="http://deltadiaz.blogspot.com/2011/10/hatex-3-first-release.html">HaTeX</a> - предыдущая версия была аж год назад. И за этот год я периодически писал автору, интересуясь, не собирается ли он что-нибудь делать, поскольку предыдущая версия была хороша только как концепт, но слишком далека от идеала и малопригодна для реального применения (хотя я ей всё таки пользовался и надеюсь ещё отдельно рассказать как именно). Хотел даже сам переделать её, но как всегда не хватало времени.</p>
+
+<p>Я кстати <a href="http://laughedelic.tumblr.com/post/5312922803">писал в мае</a> о том как и почему мне нравится HaTeX. Так вот <a href="http://deltadiaz.blogspot.com/2011/09/hatex-3-previous-notes.html">пред-релизное известие</a> о новых концепциях в HaTeX-3 очень меня обрадовало. Главный момент (для меня), в том, что теперь есть специальный <a href="http://hackage.haskell.org/packages/archive/HaTeX/3.0.0/doc/html/Text-LaTeX-Base-Syntax.html#t:LaTeX">алгебраический тип <code>LaTeX</code></a>, с помощью которого конструируются LaTeX-выражения на Haskell&#8217;е. Такой подход даёт возможность контролировать валидность получаемых (true-)LaTeX-выражений на выходе.</p>
+
+
+		
+		<a href="/blog/2011/10/26/hatex-with-unicode/" class="more-link">Read more &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-26T02:06:00+02:00" pubdate data-updated="true">Oct 26<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/hatex/'>HaTeX</a>, <a class='category' href='/blog/categories/haskell/'>Haskell</a>, <a class='category' href='/blog/categories/latex/'>LaTeX</a>, <a class='category' href='/blog/categories/tex/'>TeX</a>, <a class='category' href='/blog/categories/frpog/'>frpog</a>
+
+
+</div>
+	
+		<div class="comments"><a href="/blog/2011/10/26/hatex-with-unicode//index.html#disqus_thread">Comments</a></div>
+	
+</div></article>
+
+<nav id="pagenavi">
+    
+    
+    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
+</nav></div>
+	<footer id="footer" class="inner">Copyright &copy; 2013
+
+    laughedelic
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'laughedelic-octopress';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-26841089-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: SYB | Laughedelic's Octopress Blog]]></title>
+  <link href="http://laughedelic.github.com/blog/categories/syb/atom.xml" rel="self"/>
+  <link href="http://laughedelic.github.com/"/>
+  <updated>2013-02-12T02:21:33+01:00</updated>
+  <id>http://laughedelic.github.com/</id>
+  <author>
+    <name><![CDATA[laughedelic]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Подстановка имён в шаблонах объявлений (TH + SYB)]]></title>
+    <link href="http://laughedelic.github.com/blog/2011/11/02/name-substitution-in-declarations-th-plus-syb/"/>
+    <updated>2011-11-02T02:59:00+01:00</updated>
+    <id>http://laughedelic.github.com/blog/2011/11/02/name-substitution-in-declarations-th-plus-syb</id>
+    <content type="html"><![CDATA[<p><em>(репост из <a href="http://laughedelic.tumblr.com/post/12217333091/th-syb">tumblr</a>)</em></p>
+
+<p>Всё, пишу последний пост про свои велосипеды. Дальше буду переводить туториалы и делать уже что-нибудь более содержательное. И то, в свободное от учёбы время - надо сконцентрироваться на дипломе..</p>
+
+<p>Итак, напомню, в чём заключается задача. Я писал об этом в <a href="http://laughedelic.github.com/blog/2011/10/27/template-haskell-note/">первом посте о Template Haskell</a> - задача в том, что хочется делать сплайсинг имён в объявлениях. И я предложил вариант ухода от этой проблемы. Но в заключении того поста я сформулировал недостаток того подхода - с помощью оператора <code>(^=)</code> можно объявлять только <em>значения</em>, то есть если нужна функция с несколькими клозами:</p>
+
+<p>``` haskell</p>
+
+<pre><code>foo :: Num a =&gt; a → String
+foo x 1 = show (x + 23)
+foo x 2 = show (x - 98)
+foo x _ = show x ++ "blah-blah"
+</code></pre>
+
+<p>```</p>
+
+<p>то чтобы сделать шаблон, нужно будет запихнуть все клозы в цитату тела:</p>
+
+<p>``` haskell</p>
+
+<pre><code>fooTemplate :: String → Int → Int → String → Q [Dec]
+fooTemplate name y z blah = sequence
+    [ name ^:: [t| Num a =&gt; a → String |]
+    , name ^= [| λ a b → case (a,b) of
+                  (x,1) → show (x + y)
+                  (x,2) → show (x - z)
+                  (x,_) → show x ++ blah
+              |]
+    ] 
+</code></pre>
+
+<p>```</p>
+
+<p>Это конечно выглядит так себе. Мне не нравится это ограничение такого подхода. Ещё раз повторюсь, я хочу <strong>чтобы шаблон выглядел максимально похожим на то, что он определяет</strong>.</p>
+
+<p>И я нашёл решение. Даже два:</p>
+
+<ul>
+<li> Одно - в лоб, оно не гибкое, не красивое, для него нужно явно пользоваться конструкторами синтаксиса (чего я пытался до этого избежать), но зато простое (в смысле прямолинейное) и в ключе данной локальной задачи вполне подходит.</li>
+<li> Второе решение использует крутую технику - Scrap Your Boilerplate (SYB). Для него нужно немного прокачать своё haskell-fu, но это в любом случае стоит того и на самом деле вовсе не так сложно. То есть я на самом деле не постиг пока всех глубин Generic Programming, посредством SYB, но узнал о том, что это такое в принципе и как этим пользоваться в простейших случаях.</li>
+</ul>
+
+
+<p>Я хочу, чтобы мой шаблон выглядел как-то так:</p>
+
+<p>``` haskell</p>
+
+<pre><code>fooTemplate :: String → Int → Int → String → Q [Dec]
+fooTemplate name y z blah = ...
+    [d| foo :: Num a =&gt; a → a → String
+        foo x 1 = show $ x + y
+        foo x 2 = show $ x - z
+        foo x _ = show x ++ blah
+      |]
+</code></pre>
+
+<p>```</p>
+
+<p>То есть цитата будет буквально содержать объявление функции с несколькими клозами и будет содержать явные элементы для подстановки: <code>y, z, blah</code>, они стоят в выражении и с ними ничего делать не надо, и есть один "неявный" placeholder (держатель места) - имя функции <code>foo</code>, которое мы хотим заменить на значение параметра <code>name</code>. А вот место, где стоит троеточие - это и будет наше решение, механизм подстановки этого имени.</p>
+
+<!-- more -->
+
+
+<h2>Скучное решение</h2>
+
+<p>Начнём с простого, но скучного решения, чтобы потом увидеть преимущества продвинутого решения.</p>
+
+<p>Итак, цель - замена имени в декларации. Так и напишем:</p>
+
+<p>``` haskell</p>
+
+<pre><code>substName :: (Name → Name) → (Dec → Dec)
+</code></pre>
+
+<p>```</p>
+
+<p>то есть <code>substName</code> (от substitute name) принимает функцию меняющую одни имена на другие, а выдаёт функцию, которая проделывает эту замену внутри деклараций. Как же она выглядит? А выглядит она стрёмно, приготовьтесь:</p>
+
+<p>``` haskell</p>
+
+<pre><code>substName f (SigD    name  typ) = 
+             SigD (f name) typ
+substName f (FunD    name  clauses) = 
+             FunD (f name) clauses
+substName f (DataD cxt    name  tyVarBndr con dervs) =
+             DataD cxt (f name) tyVarBndr con dervs
+substName f (NewtypeD cxt    name  tyVarBndr con dervs) =
+             NewtypeD cxt (f name) tyVarBndr con dervs
+substName f (TySynD    name  tyVarBndr typ) = 
+             TySynD (f name) tyVarBndr typ
+substName f (ClassD cxt    name  tyVarBndr funDep dec) = 
+             ClassD cxt (f name) tyVarBndr funDep dec
+substName _ dec = dec
+</code></pre>
+
+<p>```</p>
+
+<p>Устроена эта функция очень просто: она берёт декларацию в виде структуры данных описания синтаксиса (фу), и выдаёт её же, но применив при этом функцию замены имени. Обратите внимание на следующий момент: я написал только несколько вариантов деклараций (сигнатура, объявление функции, структура данных, newtype, синоним типа и класс), для остальных же деклараций срабатывает последний клоз - ничего не меняется.</p>
+
+<p>То есть эта функция не универсальна, причём в двух аспектах:</p>
+
+<ul>
+<li> Cрабатывает не для всех деклараций. Это поправимый недостаток - надо просто дописать ещё 8 клозов (см. определение <a href="http://www.haskell.org/ghc/docs/latest/html/libraries/template-haskell-2.6.0.0/Language-Haskell-TH-Syntax.html#t:Dec"><code>Dec</code></a>).</li>
+<li> Заменяет имя только на верхнем уровне. Имена могут встречаться глубже - в "теле" декларации.</li>
+</ul>
+
+
+<p>В рамках поставленной задачи, это не важно, потому что мы хотим менять только имя функции в сигнатуре и определении, так что нам бы хватило определения только с первыми двумя клозами и последним. Но всё же.. Вдруг потом нам захочется большего...</p>
+
+<p>Ладно, теперь сделаем нашу <code>f</code> - функцию меняющую имена, так чтобы она брала список пар строк, которые собственно и означают замену первое на второе:</p>
+
+<p>``` haskell</p>
+
+<pre><code>type NamesMap = [(String, String)]
+
+rename :: NamesMap → (Name → Name)
+rename namesMap = λ oldName →
+    case lookup (show oldName) namesMap of
+         Nothing  → oldName
+         Just new → mkName new
+</code></pre>
+
+<p>```</p>
+
+<p>Функция <code>lookup</code> из <code>Data.List</code> смотрит есть данный элемент в списке пар, в качестве ключа, если есть возвращает соответствующее значение (<code>Just new</code>), из которого мы делаем новое имя (<code>mkName new</code>), если нет - <code>Nothing</code> и мы ничего не заменяем.</p>
+
+<!--
+Можно сделать интереснее - например сделать placeholder'ы универсальными, со специальным синтаксисом типа `__foo`, чтобы они заменялись на тот идентификатор из контекста, который стоит после этого `__`. Да, пожалуй, так будет круче - это же самый натуральный сплайсинг!
+
+    spliceName :: Name → Name
+    spliceName nam = 
+        case (show nam) of 
+             ('_':'_':foo) → mkName foo
+                   _       → nam
+
+То есть функция берёт имя, делает из него строку, смотрит, есть ли префикс, если есть, то извлекает оставшуюся часть и делает из неё новое имя (`mkName foo`), а если префикса нет, то возвращает то, что было.
+-->
+
+
+<p>Хорошо, словарик мы обеспечим (пока пусть называется <code>namesMap</code>), теперь нужно её как-то применить к нашим процитированным декларациям. Посмотрим на тип комбинации <code>substName</code> и <code>rename namesMap</code>:</p>
+
+<p>``` haskell</p>
+
+<pre><code>substName (rename namesMap) :: Dec → Dec
+</code></pre>
+
+<p>```</p>
+
+<p>Так, теперь на тип цитаты: <code>[d| ... |] :: Q [Dec]</code>. Такой же и возвращаемый тип шаблона. То есть нам надо сделать преобразование <code>Dec → Dec</code> внутри <code>Q [Dec]</code>. Чтобы сделать это для <code>[Dec]</code>, достаточно применить <code>map</code>:</p>
+
+<p>``` haskell</p>
+
+<pre><code>map (substName (rename namesMap)) :: [Dec] → [Dec]
+</code></pre>
+
+<p>```</p>
+
+<p>А для того чтобы теперь <em>поднять</em> эту функцию ещё на уровень выше - в монаду Q, нужно применить функцию <code>liftM :: Monad m =&gt; (a → b) → (m a → m b)</code>:</p>
+
+<p>``` haskell</p>
+
+<pre><code>(liftM (map (substName (rename namesMap)))) :: Q [Dec] → Q [Dec]
+</code></pre>
+
+<p>```</p>
+
+<p>Что и требовалось. На самом деле список - это же тоже монада, так что мы могли бы написать не <code>map</code>, а ещё один <code>liftM</code>, но ладно, не суть.</p>
+
+<p>Ну и всю эту штуковину надо как-то обозначить, убрав попутно лишние скобки:</p>
+
+<p>``` haskell</p>
+
+<pre><code>renameDecs :: NamesMap → Q [Dec] → Q [Dec]
+renameDecs namesMap = liftM $ map $ substName $ rename namesMap
+</code></pre>
+
+<p>```</p>
+
+<p>Итак, у нас уже есть все требуемые элементы, осталось собрать их воедино:</p>
+
+<p>``` haskell</p>
+
+<pre><code>fooTemplate :: String → Int → Int → String → Q [Dec]
+fooTemplate name y z blah = renameDecs [("foo", name)]
+    [d| foo :: Num a =&gt; a → a → String
+        foo x 1 = show $ x + y
+        foo x 2 = show $ x - z
+        foo x _ = show x ++ blah
+      |]
+</code></pre>
+
+<p>```</p>
+
+<p>Вот и весь шаблон. То есть мы действительно только заполнили троеточие, оставив цитату нетронутой и полностью соответствующей виду результата (по модулю подстановок).</p>
+
+<p>По-моему получилось вполне удобно и симпатично. И делать для этого пришлось не так много: <code>substName</code> → <code>rename</code> → <code>renameDecs</code>. Единственное неудобное место в этой цепочке - это громоздкая функция <code>substName</code>.</p>
+
+<h2>Решение с помощью SYB</h2>
+
+<p>Собственно, второе решение и будет отличаться только определением функции <code>substName</code>. Остальное достаточно универсально и просто.</p>
+
+<p>SYB расшифровывается как Scrap Your Boilerplate и это можно перевести как "Выброси свой говнокод", или лучше как в этой презентации: <a href="http://spbhug.folding-maps.org/wiki/Scrap_Your_Boilerplate_%26_Uniplate?action=AttachFile&amp;do=get&amp;target=syb-uniplate.pdf">"Вычистим скучный код"</a> Ивана Тарасова. Она на русском, включает в себя в некотором виде оф. презентацию SYB и рассматривает альтернативу - Uniplate. Так что всем рекомендую.</p>
+
+<p>Смысл функции <code>substName</code> очень простой - мы хотим подействовать функцией <code>f :: Name → Name</code> на все вхождения <code>Name</code> внутри декларации <code>Dec</code>, а вся эта сложная структура типа <code>Dec</code> нас не интересует. Ну вот SYB как раз и позволяет абстрагироваться нам от этой структуры и написать прямо то, что мы хотим:</p>
+
+<p>``` haskell</p>
+
+<pre><code>substName :: (Name → Name) → (Dec → Dec)
+substName f = everywhere (mkT f)
+</code></pre>
+
+<p>```</p>
+
+<p>Дословно - сделать из <code>f</code> универсальную трансформацию (<code>mkT</code> - "make transformation"), применить её везде (<code>everywhere</code>). Разве не замечательно? Просто чудесно! Тот ужасный, гов<sup>W</sup> скучный код заменился на всего два слова и притом они довольно прозрачно отражают суть происходящего (если хочется понимания того, как это устроено, поможет презентация, на которую я дал ссылку выше).</p>
+
+<p>С таким определением функция <code>substName</code> нам вообще особо не нужна. Можно сразу написать определением <code>renameDecs</code> без неё, заодно избавившись от скобочек:</p>
+
+<p>``` haskell</p>
+
+<pre><code>renameDecs :: NamesMap → Q [Dec] → Q [Dec]
+renameDecs namesMap = liftM $ map $ everywhere $ mkT $ rename namesMap
+</code></pre>
+
+<p>```</p>
+
+<p>Ну и тут можно заметить, что в этой цепочке <code>map</code> становится лишним - <code>everywhere</code> может абстрагировать преобразование не только до <code>Dec → Dec</code>, но и до <code>[Dec] → [Dec]</code> - за бесплатно:</p>
+
+<p>``` haskell</p>
+
+<pre><code>renameDecs namesMap = liftM $ everywhere $ mkT $ rename namesMap
+</code></pre>
+
+<p>```</p>
+
+<p>К сожалению написать это в стиле point-free не получается, из-за специфичных типов <code>everywhere</code> и <code>mkT</code>. Но даже так, это выглядит довольно хорошо. И при всей своей изящности, это решение лишено тех недостатков, о которых я говорил в первом случае.</p>
+
+<p>Второе решение полностью можно посмотреть тут: <a href="http://gist.github.com/1332269">GitHub gist</a>.</p>
+
+<p>Итого, не считая необязательные сигнатуры, это решение в итоге укладывается всего в <em>5 строчек кода</em>. Прекрасно! ^_^</p>
+
+<p>Для частной задачи получилось здорово. Но всё же это велосипед, потому что QuasiQuoting позволяет делать не только такие подстановки, но и любые другие, то есть расцитирование в любом месте, с любым синтаксисом и для любого DSL. Это конечно круто. Но этого, насколько я знаю, для моей задачи из коробки нету и там тоже надо будет что-то сделать/дополнить, что конечно будет круче и универсальнее, но не совсем очевидно. Этим я займусь в следующий раз. По плану, дальше перевод вводного туториала по TH, потом по QQ, а потом уже и новые <strike>велоси</strike> эксперименты с мета-программированием в общем и QQ в частности.</p>
+]]></content>
+  </entry>
+  
+</feed>

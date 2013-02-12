@@ -1,0 +1,441 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Заметка о Template Haskell - Laughedelic's Octopress Blog</title>
+	<meta name="author" content="laughedelic">
+
+	
+	<meta name="description" content="(репост из tumblr) Вступление На развёрнутый пост о своих многочисленных экспериментах с Template Haskell (далее коротко TH) у меня сейчас времени &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Laughedelic's Octopress Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Laughedelic's Octopress Blog</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:laughedelic.github.com">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/laughedelic" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/laughedelic" title="GitHub">GitHub</a>
+		
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:laughedelic.github.com">
+	</form>
+</nav>
+
+</header>
+	
+		
+<div id="banner" class="inner">
+	<div class="container">
+		<ul class="feed"></ul>
+	</div>
+	<small><a href="http://twitter.com/laughedelic">laughedelic</a> @ <a href="http://twitter.com">Twitter</a></small>
+	<div class="loading">Loading...</div>
+</div>
+<script src="/javascripts/twitter.js"></script>
+<script type="text/javascript">
+	(function($){
+		$('#banner').getTwitterFeed('laughedelic', 4, false);
+	})(jQuery);
+</script>
+
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Заметка о Template Haskell</h2>
+	<div class="entry-content"><p><em>(репост из <a href="http://laughedelic.tumblr.com/post/11969113478/template-haskell">tumblr</a>)</em></p>
+
+<h2>Вступление</h2>
+
+<p>На развёрнутый пост о своих многочисленных экспериментах с <a href="http://www.haskell.org/haskellwiki/Template_Haskell">Template Haskell</a> (далее коротко TH) у меня сейчас времени нет, но я его обязательно напишу. В планах даже перевод небольшого туториала.</p>
+
+<p>Эта заметка будет с небольшим вопросом. Я понимаю, что Simon P. Jones (автор TH) борется за чистоту и хочет чтобы везде был строгий контроль типов. На эту тему есть хороший пост в блоге GHC: <a href="http://hackage.haskell.org/trac/ghc/blog/Template%20Haskell%20Proposal">New directions for Template Haskell</a>. Я не всё там понял, но главное, понял, что всем ограничениям (и недоработкам) есть свои причины.</p>
+
+<h2>Постановка задачи</h2>
+
+<p>Мне захотелось написать с помощью TH следующую вещь, в сущности, очень простую: хочу генерить функции с данным именем и части тела. Даже ещё проще, пусть функции без параметров - по сути просто значение данного типа (тип заранее известен). Для простоты, пусть у нас есть такой тип:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="kr">data</span> <span class="kt">Foo</span> <span class="ow">=</span> <span class="kt">Bar</span> <span class="kt">String</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>И мы хотим генерить функции (не функции конечно, а <em>объявления</em>) вида:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">name</span> <span class="ow">::</span> <span class="kt">Foo</span>
+</span><span class='line'><span class="nf">name</span> <span class="ow">=</span> <span class="kt">Bar</span> <span class="n">content</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>где <code>name</code> и <code>content</code> - это заранее неизвестные значения. То есть параметры генератора/шаблона.</p>
+
+<!-- more -->
+
+
+<p>Ок, в чём моя личная проблема: я хочу как можно меньше строить AST (абстрактное синтаксическое дерево) вручную, с помощью алгебраических типов из TH.Syntax и даже больше, хочу совсем не использовать. А вместо этого я хочу использовать везде, где можно цитирование (Quoting).</p>
+
+<p>Ну вот насмотрелся я на лисповские макросы с их клёвым квазицитированием и не пойму, почему в TH этого нет &#8220;/ Да, я знаю, что там есть квазицитирование, но совсем не такое. Да, возможно я не умею его готовить, но буду рад, если кто-то меня научит.</p>
+
+<h2>Немного о TH</h2>
+
+<p>Итак, без всяких квазей, в TH есть оксфордские скобки: <code>[| som quoted haskell code here |]</code> и они бывают 4х типов:</p>
+
+<ul>
+<li><code>[e| … |]</code> или <code>[| … |]</code> для выражений (<code>:: Q Exp</code>)</li>
+<li><code>[d| … |]</code> для объявлений (<code>:: Q [Dec]</code>)</li>
+<li><code>[t| … |]</code> для типов (<code>:: Q Type</code>)</li>
+<li><code>[p| … |]</code> для образцов (паттернов) (<code>:: Q Pat</code>)</li>
+</ul>
+
+
+<p>И есть сплайсинг (splicing - не знаю, как нормально перевести) - это операция обратная цитированию: <code>$( … )</code>. Эта конструкция из цитаты получает сам код.</p>
+
+<p>Как-то так например: <code>$( [| \x → x + $( [| 1 |] ) |] )</code> — то же самое, что просто <code>\x → x + 1</code></p>
+
+<h2>Проблема</h2>
+
+<p>То есть вроде как вот тебе, пожалуйста, цитирование+расцитирование = квазицитирование. Ан нет. Проблема в том, что сплайсить можно не везде. В частности на данный момент <em>нельзя сплайсить в образцах и в типах</em>. Это-то мне и непонятно почему. В посте, на который я дал ссылку вначале есть объяснение (всякие там конфликты имён) и есть ссылки на обсуждения того, как это лучше сделать и т.п. То есть вопрос открытый и довольно давно.</p>
+
+<p>А ведь мне для генерации моих объявлений как раз и нужно сплайсить в образец. То есть я не могу просто сделать так:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">template</span> <span class="ow">::</span> <span class="kt">String</span> <span class="err">→</span> <span class="kt">String</span> <span class="err">→</span> <span class="kt">Q</span> <span class="p">[</span><span class="kt">Dec</span><span class="p">]</span>
+</span><span class='line'><span class="nf">template</span> <span class="n">name</span> <span class="n">content</span> <span class="ow">=</span> <span class="kr">let</span> <span class="n">name&#39;</span> <span class="ow">=</span> <span class="n">newName</span> <span class="n">name</span>
+</span><span class='line'>                        <span class="kr">in</span> <span class="p">[</span><span class="n">d</span><span class="o">|</span> <span class="o">$</span><span class="n">name&#39;</span> <span class="ow">=</span> <span class="kt">Bar</span> <span class="n">content</span> <span class="o">|</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>(Тип <code>Q [Dec]</code> значит, что в результате получаются &#8220;top-level declarations&#8221;)
+Просто написать [d| name = Bar content |] я тоже не могу. (newName чтобы сделать имя функции из строки (специальный тип <code>Name</code>)).</p>
+
+<p>Но ладно бы было просто какое-то объяснение - нельзя значит нельзя. Меня удивляет другое - это можно сделать, если строить синтаксическое дерево вручную! Показываю как:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">template</span> <span class="n">name</span> <span class="n">content</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="n">valD</span> <span class="p">(</span><span class="n">varP</span> <span class="p">(</span><span class="n">mkName</span> <span class="n">name</span><span class="p">))</span>
+</span><span class='line'>         <span class="p">(</span><span class="n">normalB</span> <span class="p">(</span><span class="n">appE</span> <span class="p">(</span><span class="n">conE</span> <span class="sc">&#39;Bar) </span>
+</span><span class='line'><span class="sc">                        (litE (stringL content)))) </span>
+</span><span class='line'><span class="sc">         []</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Это выглядит ужасно! Сравните с естественным квазицитированием с стиле лиспа: <code>[d| $name = Bar $content |]</code>. Небо и земля!</p>
+
+<p>При этом я ещё научился пользоваться клёвыми конструкциями из TH.Lib, а сначала делал, используя только чистый синтаксис TH.Syntax. В общем это ужасно. А хочется цитировать конструкции, чтобы синтаксическое дерево строилось для них автоматически.</p>
+
+<p>К счастью то, что стоит справа от знака <code>=</code> в объявлении - это просто выражение (<code>Exp</code>), поэтому его можно процитировать и сократить немного этот код:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">template</span> <span class="n">name</span> <span class="n">content</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="n">valD</span> <span class="p">(</span><span class="n">varP</span> <span class="p">(</span><span class="n">mkName</span> <span class="n">name</span><span class="p">))</span>
+</span><span class='line'>         <span class="p">(</span><span class="n">normalB</span> <span class="p">[</span><span class="o">|</span> <span class="kt">Bar</span> <span class="n">cont</span> <span class="o">|</span><span class="p">])</span>
+</span><span class='line'>         <span class="kt">[]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Это уже лучше. Но всё же меня мучает вопрос, <strong>почему подставить имя в такую конструкцию можно, а в цитату нельзя</strong>.</p>
+
+<p>Аналогичные проблемы и у объявления сигнатуры (<code>buz :: Foo</code>), но они решаются так же:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">sigD</span> <span class="p">(</span><span class="n">mkName</span> <span class="n">name</span><span class="p">)</span> <span class="p">(</span><span class="n">conT</span> <span class="kt">&#39;&#39;Foo</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>или</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">sigD</span> <span class="p">(</span><span class="n">mkName</span> <span class="n">name</span><span class="p">)</span> <span class="p">[</span><span class="n">t</span><span class="o">|</span> <span class="kt">Foo</span> <span class="o">|</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>что для более сложного типа было бы намного удобнее.</p>
+
+<h2><strike>Реше</strike> Уход от проблемы</h2>
+
+<p>Итак, мой вопрос озвучен, теперь я напишу, как я решил его для себя. Как видно, для моей задачи совсем обойтись без конструкторов AST не получается. Поэтому я решил просто спрятать их за небольшим синтаксическим сахаром, чтобы при построении других подобных конструкций не вспоминать про все эти ужасные штуки <code>sigD</code>, <code>conT</code> и т.д. и т.п.</p>
+
+<h2>Сахар</h2>
+
+<p>Для сигнатуры всё просто. Я уже показал, как можно цитировать тип. В качестве улучшения, я хочу забыть про <code>mkName</code> - его всё равно всегда приходится делать. Ну и разумеется долой <code>sigD</code> - вместо него мы я хочу оператор, похожий на обычное <code>::</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="p">(</span><span class="o">^::</span><span class="p">)</span> <span class="ow">::</span> <span class="kt">String</span> <span class="err">→</span> <span class="kt">Q</span> <span class="kt">Type</span> <span class="err">→</span> <span class="kt">Q</span> <span class="kt">Dec</span>
+</span><span class='line'><span class="nf">name</span> <span class="o">^::</span> <span class="n">typeQ</span> <span class="ow">=</span> <span class="n">sigD</span> <span class="p">(</span><span class="n">mkName</span> <span class="n">name</span><span class="p">)</span> <span class="n">typeQ</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Пример использования будет чуть дальше. Теперь о декларации самого определения функции. Мы можем цитировать тело, отлично, мы можем снова избавиться от <code>mkName</code> и всяких <code>varP</code>, и снова сделать оператор похожий на то, что он делает:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="p">(</span><span class="o">^=</span><span class="p">)</span> <span class="ow">::</span> <span class="kt">String</span> <span class="err">→</span> <span class="kt">Q</span> <span class="kt">Exp</span> <span class="err">→</span> <span class="kt">Q</span> <span class="kt">Dec</span>
+</span><span class='line'><span class="nf">name</span> <span class="o">^=</span> <span class="n">bodyQ</span> <span class="ow">=</span> <span class="n">valD</span> <span class="p">(</span><span class="n">varP</span> <span class="p">(</span><span class="n">mkName</span> <span class="n">name</span><span class="p">))</span> <span class="p">(</span><span class="n">normalB</span> <span class="n">bodyQ</span><span class="p">)</span> <span class="kt">[]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Замечательно. Определим ещё одну вспомогательную функцию. Она нужна для того, чтобы объединять одиночные декларации <code>Q Dec</code> в список <code>Q [Dec]</code>, поскольку именно в таком виде их нужно потом сплайсить (на top-level&#8217;е).</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">qDecs</span> <span class="ow">::</span> <span class="p">[</span><span class="kt">Q</span> <span class="kt">Dec</span><span class="p">]</span> <span class="err">→</span> <span class="kt">Q</span> <span class="p">[</span><span class="kt">Dec</span><span class="p">]</span>
+</span><span class='line'><span class="nf">qDecs</span> <span class="ow">=</span> <span class="n">mapM</span> <span class="n">id</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Эту штуку мы получили вообще даром. Для справки тип <code>mapM :: Monad m =&gt; (a → m b) → [a] → m [b]</code>, а <code>Q</code> - это кстати монада цитирования (от &#8220;Quote&#8221;).</p>
+
+<p><strong>UPDATE:</strong> что-то я забыл (спасибо eminglorion за напоминание), что есть стандартная функция <code>sequence ::  Monad m =&gt; [m a] → m [a]</code>, которая как раз делает то же самое. Так что дальше я везде исправлю <code>qDecs</code> на <code>sequence</code>.</p>
+
+<p>Итак, генератор, а правильнее сказать шаблон, который я хотел получить с самого начала будет выглядеть так:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">defFooFunc</span> <span class="n">name</span> <span class="n">content</span> <span class="ow">=</span> <span class="n">sequence</span>
+</span><span class='line'>    <span class="p">[</span> <span class="n">name</span> <span class="o">^::</span> <span class="p">[</span><span class="n">t</span><span class="o">|</span> <span class="kt">Foo</span> <span class="o">|</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">,</span> <span class="n">name</span> <span class="o">^=</span> <span class="p">[</span><span class="o">|</span> <span class="kt">Bar</span> <span class="n">content</span> <span class="o">|</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ура!!! <code>'\(^__^)/'</code>  Симпатично получилось, правда?</p>
+
+<p>Пользоваться таким шаблоном очень просто. Единственное, что сплайсить шаблоны нельзя в том же модуле, где они определены. На это тоже есть причины… Зато топовые объявления можно сплайсить без этого дурацкого $( … ).</p>
+
+<p>Итак, если я где-нибудь в другом модуле напишу</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="kr">module</span> <span class="nn">AnotherModule</span> <span class="kr">where</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">…</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">defFooFunc</span> <span class="s">&quot;baz&quot;</span> <span class="s">&quot;quux&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">…</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>То при конпеляции эта строчка заменится на</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">baz</span> <span class="ow">::</span> <span class="kt">Foo</span>
+</span><span class='line'><span class="nf">baz</span> <span class="ow">=</span> <span class="kt">Bar</span> <span class="s">&quot;quux&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Собственно, что и требовалось. В моём решении самое главное то, что <em>шаблон выглядит почти также как результат</em> - так и должно быть вообще-то.</p>
+
+<p>Приятным открытием для меня было то, что если перед <code>defFooFunc "baz" "quux"</code> написать комментарий в формате Haddoc (<code>-- | Blah-blah-blah</code>), то он нормально прицепится к сигнатуре и документация сгенерится так же, как при обычном объявлении. Это и естественно, ведь все разворачивания шаблонов происходят при конпеляции.</p>
+
+<h2>Заключение</h2>
+
+<p>Разумеется моё решение, хоть и выглядит симпатично, не является универсальным. Не любую синтаксическу конструкцию определения функции можно так описать. Но тем не  менее, так можно описывать и более сложные функции с несколькими параметрами и клозами. Например вот такое объявление:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">foo</span> <span class="ow">::</span> <span class="kt">Num</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="n">a</span> <span class="err">→</span> <span class="kt">String</span>
+</span><span class='line'><span class="nf">foo</span> <span class="n">x</span> <span class="mi">1</span> <span class="ow">=</span> <span class="n">show</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">23</span><span class="p">)</span>
+</span><span class='line'><span class="nf">foo</span> <span class="n">x</span> <span class="mi">2</span> <span class="ow">=</span> <span class="n">show</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">98</span><span class="p">)</span>
+</span><span class='line'><span class="nf">foo</span> <span class="n">x</span> <span class="kr">_</span> <span class="ow">=</span> <span class="n">show</span> <span class="n">x</span> <span class="o">++</span> <span class="s">&quot;blah-blah&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>где имя функции <code>foo</code>, числа <code>23</code>, <code>98</code> и строчка <code>"blah-blah"</code> - подстановочные. Как это делается:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">fooTemplate</span> <span class="ow">::</span> <span class="kt">Num</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="kt">String</span> <span class="err">→</span> <span class="n">a</span> <span class="err">→</span> <span class="n">a</span> <span class="err">→</span> <span class="kt">String</span> <span class="err">→</span> <span class="kt">Q</span> <span class="p">[</span><span class="kt">Dec</span><span class="p">]</span>
+</span><span class='line'><span class="nf">fooTemplate</span> <span class="n">name</span> <span class="n">y</span> <span class="n">z</span> <span class="n">blah</span> <span class="ow">=</span> <span class="n">sequence</span>
+</span><span class='line'>    <span class="p">[</span> <span class="n">name</span> <span class="o">^::</span> <span class="p">[</span><span class="n">t</span><span class="o">|</span> <span class="kt">Num</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="n">a</span> <span class="err">→</span> <span class="kt">String</span> <span class="o">|</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">,</span> <span class="n">name</span> <span class="o">^=</span> <span class="p">[</span><span class="o">|</span> <span class="err">λ</span> <span class="n">a</span> <span class="n">b</span> <span class="err">→</span> <span class="kr">case</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="kr">of</span>
+</span><span class='line'>                  <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="err">→</span> <span class="n">show</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="err">→</span> <span class="n">show</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">z</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="kr">_</span><span class="p">)</span> <span class="err">→</span> <span class="n">show</span> <span class="n">x</span> <span class="o">++</span> <span class="n">blah</span>
+</span><span class='line'>              <span class="o">|</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ну и соответственно <code>$(fooTemplate "foo" 23 98 "blah-blah")</code> сплайсится в то определение, которое мы рассматриваем. Нет, ну конечно не в то же самое. Да, там было три клоза, а у в шаблоне один.. Ну и что, функция ведь получилась такая же. Может кто-нибудь знает, почему не такая же - буду рад узнать.</p>
+
+<p>Меня же такой подход расстраивает только тем, что шаблон опять же выглядит не совсем так, как желаемый результат. Эта неудобная конструкция <code>λ a b → case (a,b) of …</code> конечно не радует глаз, но пока у меня нет прямого решения. Я пробовал сделать это напрямую, но пока у меня это не получилось, потому что возникают проблемы с образцами, а процитировать отдельно клоз нельзя.</p>
+
+<p><strong>UPDATE:</strong>
+Я решил эту проблему и описал решение в другом <a href="http://laughedelic.github.com/blog/2011/11/02/name-substitution-in-declarations-th-plus-syb/">посте</a>.</p>
+
+<p><strong>P.S.</strong> как-то у меня не получается писать совсем коротко. Пост сначала назывался &#8220;Короткая заметка …&#8221;, но потом я увлёкся и пришлось изменить название. Я хотел написать только коротко о проблеме и моём решении, но без краткого введения в Template Haskell и сопутствующих тем не обошлось. Наверное потому, что мне представляется читатель, который не знает толком этих всех штук и которого надо хотя бы в общем ввести в курс дела. По видимому, это психологическая проекция, ведь обычно, я сам оказываюсь таким несведущим читателем, интересных, но сложных статей…</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-27T03:05:00+02:00" pubdate data-updated="true">Oct 27<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/haskell/'>Haskell</a>, <a class='category' href='/blog/categories/template-haskell/'>Template Haskell</a>, <a class='category' href='/blog/categories/frpog/'>frpog</a>
+
+
+</div>
+	
+		<div class="comments"><a href="/blog/2011/10/27/template-haskell-note/#disqus_thread">Comments</a></div>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2013
+
+    laughedelic
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'laughedelic-octopress';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://laughedelic.github.com/blog/2011/10/27/template-haskell-note/';
+        var disqus_url = 'http://laughedelic.github.com/blog/2011/10/27/template-haskell-note/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-26841089-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>
