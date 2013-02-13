@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Laughedelic's Octopress Blog]]></title>
+  <title><![CDATA[λaughedelic's blog]]></title>
   <link href="http://laughedelic.github.com/atom.xml" rel="self"/>
   <link href="http://laughedelic.github.com/"/>
-  <updated>2013-02-12T02:21:33+01:00</updated>
+  <updated>2013-02-13T23:06:21+01:00</updated>
   <id>http://laughedelic.github.com/</id>
   <author>
     <name><![CDATA[laughedelic]]></name>
-    
+    <email><![CDATA[laughedelic@gmail.com]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
@@ -18,18 +18,13 @@
     <link href="http://laughedelic.github.com/blog/2011/11/07/initial-post/"/>
     <updated>2011-11-07T02:50:00+01:00</updated>
     <id>http://laughedelic.github.com/blog/2011/11/07/initial-post</id>
-    <content type="html"><![CDATA[<p><img class="left" src="http://laughedelic.github.com/images/Octopress.jpg"></p>
-
-<p>Ура! Я сгенерил этот блог с помощью замечательного <a href="http://octopress.org">Octopress</a> и разместил его на <a href="http://github.com/laughedelic/laughedelic.github.com">GitHub</a>. Теперь я перееду с <a href="http://laughedelic.tumblr.com">Tumblr</a> и сделаю тут самый уютный и замечательный бложик со всякими клёвыми свистелками, блекджеком и подсветкой кода в постах конечно! Тумблер тоже останется как эдакая удобная лента для репостов, ссылок, цитат и т.д. и т.п.</p>
-
-<!-- more -->
-
+    <content type="html"><![CDATA[<p>Ура! Я сгенерил этот блог с помощью замечательного <a href="http://octopress.org">Octopress</a> и разместил его на <a href="http://github.com/laughedelic/laughedelic.github.com">GitHub</a>. Теперь я перееду с <a href="http://laughedelic.tumblr.com">Tumblr</a> и сделаю тут самый уютный и замечательный бложик со всякими клёвыми свистелками, блекджеком и подсветкой кода в постах конечно! Тумблер тоже останется как эдакая удобная лента для репостов, ссылок, цитат и т.д. и т.п.</p>
 
 <p>Я давно хотел сделать такой гиковский блог с помощью <a href="http://jaspervdj.be/hakyll">Hakyll</a>, но провозившись с ним вчера полдня, понял, что это не для меня. Дело в том, что документации по нему мало, а примеры все примитивные. Я хотел простой блог, но с хорошим оформлением и возможностью прикручивать всякие удобные дополнения. А там чтобы сделать нормальное оформление, надо ручками писать шаблоны и css&#8217;ы и всё такое. После десятка тщетных попыток перенести туда какие-то темы из других блогов, я бросил это глупое занятие. Не дорос я видимо ещё до того, чтобы собирать &#8220;blog from scratch&#8221;.</p>
 
 <p><a href="http://github.com/mojombo/jekyll/wiki">Jekyll</a> — подобный генератор статических сайтов, который появился раньше <a href="http://jaspervdj.be/hakyll">Hakyll</a>&#8216;а и намного более популярен. Для него больше всего и главное, информации по настройке. Но <a href="http://jaspervdj.be/hakyll">Hakyll</a> меня привлекал тем, что его конфиг — просто скрипт на Haskell (на котором он и написан). А конфиг <a href="http://github.com/mojombo/jekyll/wiki">Jekyll</a> — соответственно скрипт на Ruby. С Ruby я не имею никакого знакомства и поэтому мне не хотелось особенно долго с ним разбираться, так что с <a href="http://github.com/mojombo/jekyll/wiki">Jekyll</a> я тоже не стал связываться.</p>
 
-<p><img class="right" src="http://laughedelic.github.com/images/crocheted_octocute.jpeg"></p>
+<p><img class="left" src="http://laughedelic.github.com/images/crocheted_octocute.jpeg"></p>
 
 <p>И вот, я натыкаюсь на <a href="http://octopress.org">Octopress</a> с очень милым осьминогом, который умеет настраивать <a href="http://github.com/mojombo/jekyll/wiki">Jekyll</a> на раз-два. Я поднял этот блог со стандартным оформлением (которое на мой взгляд вполне себе ничего для дефолтного) всего за полчаса. Это не может не радовать &#8220;) Глядя на то, как бодро и чётко всё работает, я даже заинтересовался Ruby&#8230;</p>
 

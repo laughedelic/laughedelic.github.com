@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Haskell | Laughedelic's Octopress Blog]]></title>
+  <title><![CDATA[Category: Haskell | λaughedelic's blog]]></title>
   <link href="http://laughedelic.github.com/blog/categories/haskell/atom.xml" rel="self"/>
   <link href="http://laughedelic.github.com/"/>
-  <updated>2013-02-12T02:21:33+01:00</updated>
+  <updated>2013-02-13T23:06:21+01:00</updated>
   <id>http://laughedelic.github.com/</id>
   <author>
     <name><![CDATA[laughedelic]]></name>
-    
+    <email><![CDATA[laughedelic@gmail.com]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
