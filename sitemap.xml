@@ -2,44 +2,48 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://laughedelic.github.com/blog/2011/10/26/hatex-with-unicode/</loc>
-        <lastmod>2013-02-13T22:59:24+01:00</lastmod>
+        <lastmod>2013-02-14T12:36:05+01:00</lastmod>
     </url>
     <url>
         <loc>http://laughedelic.github.com/blog/2011/10/27/template-haskell-note/</loc>
-        <lastmod>2013-02-13T22:59:24+01:00</lastmod>
+        <lastmod>2013-02-14T12:36:05+01:00</lastmod>
     </url>
     <url>
         <loc>
             http://laughedelic.github.com/blog/2011/10/30/template-haskell-in-hatexextension-1/
         </loc>
-        <lastmod>2013-02-13T22:59:24+01:00</lastmod>
+        <lastmod>2013-02-14T12:36:05+01:00</lastmod>
     </url>
     <url>
         <loc>
             http://laughedelic.github.com/blog/2011/10/30/template-haskell-in-hatexextension-2/
         </loc>
-        <lastmod>2013-02-13T22:59:24+01:00</lastmod>
+        <lastmod>2013-02-14T12:36:05+01:00</lastmod>
     </url>
     <url>
         <loc>http://laughedelic.github.com/blog/2011/11/01/hatexextension-at-github/</loc>
-        <lastmod>2013-02-13T22:59:24+01:00</lastmod>
+        <lastmod>2013-02-14T12:36:05+01:00</lastmod>
     </url>
     <url>
         <loc>
             http://laughedelic.github.com/blog/2011/11/02/name-substitution-in-declarations-th-plus-syb/
         </loc>
-        <lastmod>2013-02-13T22:59:24+01:00</lastmod>
+        <lastmod>2013-02-14T12:36:05+01:00</lastmod>
     </url>
     <url>
         <loc>http://laughedelic.github.com/blog/2011/11/07/initial-post/</loc>
-        <lastmod>2013-02-13T22:59:24+01:00</lastmod>
+        <lastmod>2013-02-14T12:36:05+01:00</lastmod>
+    </url>
+    <url>
+        <loc>http://laughedelic.github.com/about-me/</loc>
+        <lastmod>2013-02-14T12:36:05+01:00</lastmod>
     </url>
     <url>
         <loc>http://laughedelic.github.com/blog/archives/</loc>
-        <lastmod>2013-02-13T22:59:24+01:00</lastmod>
+        <lastmod>2013-02-14T12:36:05+01:00</lastmod>
     </url>
     <url>
         <loc>http://laughedelic.github.com/</loc>
-        <lastmod>2013-02-13T22:59:24+01:00</lastmod>
+        <lastmod>2013-02-14T12:36:05+01:00</lastmod>
     </url>
 </urlset>
