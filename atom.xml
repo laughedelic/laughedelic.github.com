@@ -4,7 +4,7 @@
   <title><![CDATA[λaughedelic's blog]]></title>
   <link href="http://laughedelic.github.com/atom.xml" rel="self"/>
   <link href="http://laughedelic.github.com/"/>
-  <updated>2013-02-14T15:55:32+01:00</updated>
+  <updated>2013-02-15T01:57:24+01:00</updated>
   <id>http://laughedelic.github.com/</id>
   <author>
     <name><![CDATA[laughedelic]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Обновление/Update]]></title>
+    <link href="http://laughedelic.github.com/blog/2013/02/15/update/"/>
+    <updated>2013-02-15T01:29:00+01:00</updated>
+    <id>http://laughedelic.github.com/blog/2013/02/15/update</id>
+    <content type="html"><![CDATA[<p>Я обновил оформление блога (<a href="http://zespia.tw/Octopress-Theme-Slash/">slash-theme</a>), добавил страницу со ссылкой на <a href="http://about.me/laughedelic">about.me</a> и хочу коротко написать в этом переходном посте об изменениях.</p>
+
+<p>Я не писал сюда довольно долго, хотя за последний год у меня было довольно много интересного программистского опыта. Надеюсь, в ближайшее время у меня будет возможность заполнить этот пробел.</p>
+
+<p>Опуская всё то, что предшествовало этому, с декабря я принимаю участие в европейской программе <a href="http://intercrossing.wikispaces.com">Intercrossing</a>, работаю в <a href="http://era7.com">Era7 Bioinformatics</a> — Испанской компании, расположенной в чудесном городе Гранада. Подробнее об этом я <a href="http://laughedelic-at-granada.tumblr.com/post/37876573067">писал в другом своём блоге</a>.</p>
+
+<p>И последнее, я дублирую текст этого поста на двух языках, потому что последующие посты я собираюсь писать на английском.</p>
+
+<hr />
+
+<p>I&#8217;ve updated blog theme (<a href="http://zespia.tw/Octopress-Theme-Slash/">slash</a>), added a page with a link to <a href="https://about.me/laughedelic">about.me</a> and in this transition post I want to explain shortly about changes.</p>
+
+<p>I haven&#8217;t written here for a long time, while I had a lot of interesting programming experience during last year. I hope, I will have enough time in the nearest future to fill this gap.</p>
+
+<p>Skipping all those things that happened to me and moving directly to the current state, since the beginning of December I&#8217;m taking a part in the <a href="http://intercrossing.wikispaces.com">Intercrossing</a> International Training Network, working at the <a href="http://era7.com">Era7 Bioinformatics</a> — Spanish company based in a beautiful city Granada.</p>
+
+<p>And the last, I duplicate text of this post in two languages, because I&#8217;m going to write further posts in English.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Initial post]]></title>
